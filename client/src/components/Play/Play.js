@@ -37,7 +37,7 @@ const Play = ({ match }) => {
         loadLayout(new_layout);
     }
 
-        // Gets values every input 
+        // Gets values from each letter on every input (the data has input value and letter id)
 //$$ TO-DO to check if complete and to focus on next letter TO-DO $$
 //∞∞ THEN: add word definitions on new component under current display ∞∞
     const getValue = (value) => {
