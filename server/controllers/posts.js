@@ -1,5 +1,5 @@
 import PostPuzzle from '../models/postPuzzle.js';
-import diccionario from './diccionario.json';
+import DefinedWords from '../models/words.js';
 
 export const getPosts = async (req, res) => {
     try {
@@ -10,18 +10,50 @@ export const getPosts = async (req, res) => {
     }
 }
 
-export const createPost = async (req,res) => {
+export const createPost = async (req, res) => {
+    
     const post = req.body;
-    const word = post.secret;
-
-    for (let letter of word) {
-        
-    }
 
     const newPost = new PostPuzzle(post);
     try {
         await newPost.save();
         res.status(200).json(newPost);
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+}
+
+export const getWords = async (req, res) => {
+    const word = req.body.secret;
+
+    const validWords = {};
+    
+    try {
+        for (let letter of word) {
+            if (!validWords[letter]){
+                validWords[letter] = await DefinedWords.find({ "palabra": {$regex: `${letter}`, $options:"i"}});
+            }
+        }
+        res.status(200).json(validWords);
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+}
+
+export const getPuzzle = async (req, res) => {
+    try {
+        const word = await PostPuzzle.findById(req.params.id);
+        res.status(200).json(word);
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+}
+
+// Only to clean data during production, remove before build.
+export const emptyPosts = async (req, res) => {
+    try {
+        await PostPuzzle.deleteMany({});
+        res.status(200).json({ message: "posts deleted" });
     } catch (err) {
         res.status(409).json({ message: err.message });
     }
