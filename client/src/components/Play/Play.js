@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Grid } from '@material-ui/core';
 import useStyles from './styles';
 import Word from './Word/Word';
+import Definition from './Definition/Definition'
 
 const Play = ({ match }) => {
 
@@ -11,6 +12,8 @@ const Play = ({ match }) => {
     const [usrInput, loadInput] = useState({});
     const [solution, loadSolution] = useState([]);
     const [indexMap, setIndexMap] = useState([]);
+    const [defined, setDefined] = useState("");
+
 
     const classes = useStyles();
 
@@ -50,7 +53,9 @@ const Play = ({ match }) => {
     const fetchPuzzle = async () => {
         const response = await axios.get(`http://localhost:5000/posts/${match.params.id}`)
             .catch(err => console.log(err.message));
-        loadPuzzle(response.data);
+        if(response.data){
+            loadPuzzle(response.data);
+        }
     }
 
     const createLayout = () => {
@@ -76,6 +81,10 @@ const Play = ({ match }) => {
     }
     // Manage auto focus to next empty letter or word
     const manageNext = (inputCoords, newUsrInput) => {
+        // if all places filled dont focus other
+        if(newUsrInput.toString().length === solution.toString().length){
+            return
+        }
     
         // if last word is completed
         let nextIndex = inputCoords.y+1;
@@ -88,6 +97,9 @@ const Play = ({ match }) => {
         const emptyIndexPre = checkIndexes(word);
         if (emptyIndexPre === -1){
             inputCoords.y = nextIndex;
+            setDefined(puzzle.definitions[nextIndex]);
+            inputCoords.x = 0; 
+            inputCoords.displace = 0;
             return manageNext(inputCoords, newUsrInput);
         } else {
             // if on middle of the word or last char
@@ -124,6 +136,7 @@ const Play = ({ match }) => {
         newIndexMap[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.id;
 
         loadInput(newUsrInput);
+        setDefined(puzzle.definitions[value.id[2]]);
         if (value.value !== ''){
             manageNext(inputCoords, newUsrInput);
         }
@@ -137,12 +150,13 @@ const Play = ({ match }) => {
                 <Word layout={layout} position={"left"} setValue={getValue} />
             </Grid> 
             <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={1}>
-                <Word layout={layout} position={"center"} setValue={getValue}/>
+                <Word layout={layout} position={"center"} setValue={getValue} />
             </Grid> 
             <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
-                <Word layout={layout} position={"right"} setValue={getValue}/>
+                <Word layout={layout} position={"right"} setValue={getValue} />
             </Grid> 
         </Grid>
+        <Definition definition={defined} />
         </>
     )
 }

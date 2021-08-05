@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const postSchema = mongoose.Schema({
     secret: String,
     words: [Object],
+    definitions: [Object],
     creator: String,
     rating: {
         type: Number,

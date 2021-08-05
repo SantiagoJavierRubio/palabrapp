@@ -17,6 +17,10 @@ const Letter = (props) => {
 
     const handleSelect = () => {
         setLetter("");
+        setValue({
+            id: id,
+            value: ""
+        })
     }
 
     const valid_chars = /([A-ZÑ])/gi;
