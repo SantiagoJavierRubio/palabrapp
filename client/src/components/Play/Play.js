@@ -8,18 +8,44 @@ const Play = ({ match }) => {
 
     const [puzzle, loadPuzzle] = useState({});
     const [layout, loadLayout] = useState({left: [], center: [], right: []});
+    const [usrInput, loadInput] = useState({});
+    const [solution, loadSolution] = useState([]);
+    const [indexMap, setIndexMap] = useState([]);
 
     const classes = useStyles();
 
     useEffect(() => {
-        fetchPuzzle()
+        fetchPuzzle();
     }, []);
 
     useEffect(() => {
         if(puzzle.secret){
             createLayout();
+            createUsrInput();
         }
     }, [puzzle]);
+
+    const createUsrInput = () => {
+        const newUsrInput = [];
+        const newSolution = [];
+        const newIndexMap = [];
+
+        for (let i=0; i < puzzle.secret.length; i++){
+            newUsrInput.push([]);
+            newSolution.push([]);
+            newIndexMap.push([]);
+            puzzle.words[i].forEach(sector => {
+                sector.split('').forEach(letter => {
+                    newUsrInput[i].push([]);
+                    newIndexMap[i].push([]);
+                    newSolution[i].push([letter]);
+                });
+            });
+        }
+        loadSolution(newSolution);
+        loadInput(newUsrInput);
+        setIndexMap(newIndexMap);
+    }
 
     const fetchPuzzle = async () => {
         const response = await axios.get(`http://localhost:5000/posts/${match.params.id}`)
@@ -37,11 +63,70 @@ const Play = ({ match }) => {
         loadLayout(new_layout);
     }
 
-        // Gets values from each letter on every input (the data has input value and letter id)
-//$$ TO-DO to check if complete and to focus on next letter TO-DO $$
 //∞∞ THEN: add word definitions on new component under current display ∞∞
+
+    // Custom function to get index of empty char
+    const checkIndexes = (word, index=0) => {
+        for (let i=index; i<word.length; i++){
+            if (word[i] == ""){
+                return i;
+            }
+        }
+        return -1;
+    }
+    // Manage auto focus to next empty letter or word
+    const manageNext = (inputCoords, newUsrInput) => {
+    
+        // if last word is completed
+        let nextIndex = inputCoords.y+1;
+        if (inputCoords.y === puzzle.secret.length - 1){
+            nextIndex = 0;
+        }
+
+        // if all the word is completed
+        const word = newUsrInput[inputCoords.y];
+        const emptyIndexPre = checkIndexes(word);
+        if (emptyIndexPre === -1){
+            inputCoords.y = nextIndex;
+            return manageNext(inputCoords, newUsrInput);
+        } else {
+            // if on middle of the word or last char
+            const emptyIndexPost = checkIndexes(word, inputCoords.x+inputCoords.displace)
+            if (emptyIndexPost !== -1){
+                let target = indexMap[inputCoords.y][emptyIndexPost][0];
+                return document.getElementById(target).focus();
+            } else {
+            // if empty before
+                let target = indexMap[inputCoords.y][emptyIndexPre][0];
+                return document.getElementById(target).focus();
+            }
+        }
+    }
+
+    // Gets values from each letter on every input (the data has input value and letter id) - Creates a map of inputs and ids
     const getValue = (value) => {
-        console.log(value);
+        const newUsrInput = [...usrInput];
+        const newIndexMap = [...indexMap];
+        const inputCoords = {
+                        x: parseInt(value.id[4]),
+                        y: parseInt(value.id[2]),
+                        displace: 0
+                    };
+                    
+        if (value.id[0] !== 'l' && layout.left[inputCoords.y][0] !== ''){
+            inputCoords.displace = layout.left[inputCoords.y].length;
+            if (value.id[0] === 'r'){
+                inputCoords.displace = inputCoords.displace+1;
+            };
+        };
+
+        newUsrInput[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.value;
+        newIndexMap[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.id;
+
+        loadInput(newUsrInput);
+        if (value.value !== ''){
+            manageNext(inputCoords, newUsrInput);
+        }
     }
 
 
