@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
+import { Container, AppBar, Typography, Grow } from '@material-ui/core';
 import Form from './components/Form/Form';
 import Lobby from './components/Lobby/Lobby';
 import Play from './components/Play/Play';

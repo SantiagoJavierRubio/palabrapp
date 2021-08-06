@@ -23,7 +23,7 @@ const Letter = (props) => {
         })
     }
 
-    const valid_chars = /([A-ZÑ])/gi;
+    const valid_chars = new RegExp(/([A-ZÑ])/, 'i');
     const handleInput = (e) => {
         const input = e.target.value;
         if(valid_chars.test(input)){
