@@ -7,7 +7,7 @@ router.get('/', getPosts);
 
 router.post('/new', createPost);
 
-router.post('/', getWords);
+router.post('/get_words', getWords);
 
 router.get('/:id', getPuzzle);
 
