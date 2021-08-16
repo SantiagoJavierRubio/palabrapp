@@ -24,7 +24,6 @@ import useStyles from './styles';
 const App = () => {
     
     const [displayDrawer, setDrawerDisplay] = useState(false);
-    const [showLogin, setLoginView] = useState(false);
     const [user, setUser] = useState(null);
 
     const toggleDrawer = () => {
@@ -37,14 +36,13 @@ const App = () => {
 
     useEffect(()=> {
         const loggedUser = localStorage.getItem('user');
-        if (loggedUser) {
+        if (loggedUser && loggedUser !== undefined) {
             setUser(loggedUser)
         }
     }, []);
 
     const logUser = (user_data) => {
         setUser(user_data);
-        setLoginView(false);
     }
 
     const handleLogOut = () => {
@@ -56,7 +54,6 @@ const App = () => {
     
     return(
         <Container maxWidth="lg">
-            {showLogin ? <UserManagement logUser={logUser} /> : null}
             <AppBar position="static" color="inherit" className={classes.appBar}>
                 <Toolbar>
                     <IconButton edge="start" onClick={toggleDrawer}>
@@ -95,8 +92,8 @@ const App = () => {
                         <>
                             <PersonIcon /><p>{user}</p><Button onClick={handleLogOut} >(Sign out)</Button>
                         </> 
-                        : 
-                        <Button variant="outlined" onClick={()=>setLoginView(true)}>Sign In</Button>
+                        :
+                        <UserManagement logUser={logUser} />
                     }
                     
                 </Toolbar>

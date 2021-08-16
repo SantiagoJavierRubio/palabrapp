@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button } from '@material-ui/core';
+import { Modal, Box, Typography, TextField, Button, ClickAwayListener } from '@material-ui/core';
 import useStyles from './styles';
 import axios from 'axios';
 
 const Login = (props) => {
 
     const [showModal, setModal] = useState(true);
-    const { logUser, register } = props;
+    const { logUser, toggleRegister, toggleView } = props;
+    const classes = useStyles()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,24 +18,35 @@ const Login = (props) => {
         const validation = await axios.post('http://localhost:5000/user/validate', log_data);
         if(validation.data.userID){
             logUser(validation.data.userID);
+            toggleView();
             localStorage.setItem('user', validation.data.userID);
         }
     }
 
+    const handleClose = () => {
+        setModal(false);
+        toggleView();
+    }
+
     return(
-        <Modal open={showModal} onClose={()=>setModal(false)}>
-            <Box>
-                <Typography variant="h2">Sign in</Typography>
-                <form onSubmit={handleSubmit}>
-                    <TextField required id="login-id" label="User ID" type="text" inputProps={{ minLength: 6, maxLength: 20 }} />
-                    <TextField required id="login-password" label="Password" type="password" inputProps={{ minLength: 6, maxLength: 15 }} />
-                    <Button variant="contained" type="submit">Login</Button>
-                </form>
-                <Button variant="contained" color="secondary" onClick={register}>
-                    Register
-                </Button>
-            </Box>
-        </Modal>
+        <ClickAwayListener onClickAway={handleClose}>
+            <Modal open={showModal} BackdropProps={{invisible: true}} onClose={handleClose} className={classes.loginModal}>
+                <Box className={classes.loginBox}>
+                    <Typography variant="h2" className={classes.loginHeader}>Sign in</Typography>
+                    <form onSubmit={handleSubmit} className={classes.loginForm}>
+                        <TextField required id="login-id" label="User ID" type="text" inputProps={{ minLength: 6, maxLength: 20 }} />
+                        <TextField required id="login-password" label="Password" type="password" inputProps={{ minLength: 6, maxLength: 15 }} />
+                        <Button variant="contained" type="submit">Login</Button>
+                    </form>
+                    <Box className={classes.loginNew}>
+                        <Typography variant="h6" className={classes.newText}>New?</Typography>
+                        <Button variant="contained" color="secondary" onClick={toggleRegister}>
+                            Register
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
+        </ClickAwayListener>
     )
 }
 
