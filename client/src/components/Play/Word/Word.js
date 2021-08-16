@@ -1,6 +1,6 @@
 import React from 'react';
 import Letter from './Letter';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import useStyles from './styles';
 
 
@@ -9,8 +9,6 @@ const Word = (props) => {
     const { layout, position, setValue } = props;
 
     const classes = useStyles();
-
-    
 
     switch (position) {
         case "left":

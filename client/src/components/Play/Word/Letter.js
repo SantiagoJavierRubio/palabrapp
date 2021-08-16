@@ -35,7 +35,7 @@ const Letter = (props) => {
 
     return (
         <Paper className={classes.paper} elevation={3}>
-            <input id={id} type="text" maxLength={1} onClick={handleSelect} onChange={handleInput} value={inputLetter} className={classes.letterInput}/>
+            <input id={id} type="text" maxLength={1} onClick={handleSelect} onChange={handleInput} value={inputLetter} className={classes.letterInput} />
         </Paper>
     )
 }

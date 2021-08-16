@@ -6,9 +6,11 @@ const Definition = (props) => {
 
     const { definition } = props;
 
+    const classes = useStyles();
+
     return(
         <>
-            <Card variant="outlined">
+            <Card variant="outlined" className={classes.definitionCard}>
                 <CardContent>
                     <Typography variant="h5">
                         {definition}

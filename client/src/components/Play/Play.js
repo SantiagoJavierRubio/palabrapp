@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress, Box } from '@material-ui/core';
 import useStyles from './styles';
 import Word from './Word/Word';
 import Definition from './Definition/Definition'
@@ -13,7 +13,7 @@ const Play = ({ match }) => {
     const [solution, loadSolution] = useState([]);
     const [indexMap, setIndexMap] = useState([]);
     const [defined, setDefined] = useState("");
-
+    const [UIState, setUI] = useState('');
 
     const classes = useStyles();
 
@@ -48,6 +48,7 @@ const Play = ({ match }) => {
         loadSolution(newSolution);
         loadInput(newUsrInput);
         setIndexMap(newIndexMap);
+        setUI('done');
     }
 
     const fetchPuzzle = async () => {
@@ -67,8 +68,6 @@ const Play = ({ match }) => {
         });
         loadLayout(new_layout);
     }
-
-//∞∞ THEN: add word definitions on new component under current display ∞∞
 
     // Custom function to get index of empty char
     const checkIndexes = (word, index=0) => {
@@ -116,12 +115,16 @@ const Play = ({ match }) => {
     }
 
     // Gets values from each letter on every input (the data has input value and letter id) - Creates a map of inputs and ids
+   
+    const id_match = new RegExp(/(?!-)[0-9]*/, 'g');
+
     const getValue = (value) => {
         const newUsrInput = [...usrInput];
         const newIndexMap = [...indexMap];
+        let indexes = value.id.match(id_match);
         const inputCoords = {
-                        x: parseInt(value.id[4]),
-                        y: parseInt(value.id[2]),
+                        x: parseInt(indexes[2]),
+                        y: parseInt(indexes[1]),
                         displace: 0
                     };
                     
@@ -142,23 +145,30 @@ const Play = ({ match }) => {
         }
     }
 
-
-    return(
-        <>
-        <Grid container className={classes.puzzleContainer} alignItems="center" justifyContent="center" >
-            <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
-                <Word layout={layout} position={"left"} setValue={getValue} />
-            </Grid> 
-            <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={1}>
-                <Word layout={layout} position={"center"} setValue={getValue} />
-            </Grid> 
-            <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
-                <Word layout={layout} position={"right"} setValue={getValue} />
-            </Grid> 
-        </Grid>
-        <Definition definition={defined} />
-        </>
-    )
+    if(UIState === 'done'){
+        return(
+            <>
+            <Grid container className={classes.puzzleContainer} alignItems="center" justifyContent="center" >
+                <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
+                    <Word layout={layout} position={"left"} setValue={getValue} />
+                </Grid> 
+                <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={1}>
+                    <Word layout={layout} position={"center"} setValue={getValue} />
+                </Grid> 
+                <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
+                    <Word layout={layout} position={"right"} setValue={getValue} />
+                </Grid>
+            </Grid>
+            <Definition definition={defined} />
+            </>
+        )
+    } else {
+        return (
+            <Box className={classes.loadingCircle}>
+                <CircularProgress />
+            </Box>
+        )
+    }
 }
 
 export default Play
