@@ -4,7 +4,11 @@ export default makeStyles((theme) => ({
     secretForm: {
         marginTop: '1rem',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    inputText: {
+        width: 'fit-content',
     },
     secretTitle: {
         textDecoration: 'underline',

@@ -9,7 +9,7 @@ export default makeStyles(()=>({
         display: 'flex',
         width: 'fit-content',
         height: 'fit-content',
-        backgroundColor: '#999',
+        backgroundColor: 'rgb(234,234,234)',
         border: '3px solid black',
         boxShadow: '1px 1px',
     },
@@ -37,5 +37,14 @@ export default makeStyles(()=>({
     },
     submitBtn: {
         marginTop: '1rem',
-    }
+    },
+    registredIcon: {
+        fontSize: '2rem',
+        alignSelf: 'center',
+        color: '#5AEB60',
+    },
+    registedText: {
+        fontSize: '2rem',
+        fontWeight: 400,
+    },
 }))

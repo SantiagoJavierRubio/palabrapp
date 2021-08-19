@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
 import { TextField, Grid, Button, ButtonGroup, Box, Typography, CircularProgress } from '@material-ui/core';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import axios from 'axios';
     
 const Form = () => {
@@ -21,6 +22,7 @@ const Form = () => {
         if(!valid_chars.test(inputValue)){
             setSecret(inputValue.toUpperCase());
         } else {
+            setUI('start');
             setInputError({bool: true, msg: 'Letters only'});
         }
     }
@@ -85,24 +87,28 @@ const Form = () => {
         setInputError({bool: false, msg: ''});
     }, [inputValue]);
 
-    const handlePost = () => {
+    const handlePost = async () => {
         setUI('loading');
-        const user = localStorage.getItem('user');
-        if(user){
-            try{
-                axios.post('http://localhost:5000/posts/new', {
-                    secret: puzzle.secret,
-                    words: puzzle.words,
-                    definitions: puzzle.definitions,
-                    creator: user
-                })
-                setUI('done');
-            } catch (err) {
-                setUI('error');
-                console.log(err);
+        const user_id = localStorage.getItem('user');
+        if(user_id){
+            const user_data = await axios.get(`http://localhost:5000/user/${user_id}`);
+            if(user_data){
+                try{
+                    axios.post('http://localhost:5000/posts/new', {
+                        secret: puzzle.secret,
+                        words: puzzle.words,
+                        definitions: puzzle.definitions,
+                        creator: user_data.data
+                    });
+                    console.log(user_data);
+                    setUI('done');
+                } catch (err) {
+                    setUI('error');
+                    console.log(err);
+                }
             }
         } else {
-            window.alert('You need to log in to make an entry');
+            window.alert('Please sign in to make an entry');
             setUI('puzzle');
         }
     }
@@ -123,7 +129,8 @@ const Form = () => {
         case 'start':
             return(
                 <form onSubmit={handleSubmit} className={classes.secretForm}>
-                    <TextField fullWidth label="Your secret word" inputProps={{maxLength: 12}} onChange={(e) => setInput(e.target.value)} id="secret-input" error={inputError.bool} helperText={inputError.msg}/>
+                    <TextField fullWidth label="Your secret word" inputProps={{maxLength: 12}} onChange={(e) => setInput(e.target.value)} id="secret-input" error={inputError.bool} helperText={inputError.msg} className={classes.inputText}/>
+                    <Button variant="contained" color="primary" type="submit" endIcon={<ArrowForwardIcon />}>Create</Button>
                 </form>
             );
 
@@ -134,7 +141,7 @@ const Form = () => {
                     <Grid container direction="row" alignItems="stretch" spacing={1}>
                         {puzzle.words.map(word=> {
                             return(
-                                <Grid container item className={classes.wordContainer} justifyContent="center" xs={12}>
+                                <Grid key={word[0]} container item className={classes.wordContainer} justifyContent="center" xs={12}>
                                     <Grid item xs={5} align="right">{word[0]}</Grid>
                                     <Grid item xs={1} align="center" className={classes.secretWord}>{word[1]}</Grid>
                                     <Grid item xs={5} align="left">{word[2]}</Grid>

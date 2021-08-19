@@ -4,7 +4,7 @@ const postSchema = mongoose.Schema({
     secret: String,
     words: [Object],
     definitions: [Object],
-    creator: String,
+    creator: Object,
     rating: {
         type: Number,
         default: 0

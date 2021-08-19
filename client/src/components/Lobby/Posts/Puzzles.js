@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Puzzle from './Post/Puzzle'
+import Puzzle from './Post/Puzzle';
+import { Grid } from '@material-ui/core';
 import useStyles from './styles';
     
 const Puzzles = () => {
@@ -19,14 +20,16 @@ const Puzzles = () => {
     }
 
     return(
-        <>
+        <Grid className={classes.gridContainer} container alignItems="stretch" spacing={3} >
             {puzzles.map(puzzle => {
                 return(
-                    <Puzzle key={puzzle._id} puzzle_data={puzzle} />
+                    <Grid key={puzzle._id} item xs={12} sm={6} md={4}>
+                        <Puzzle puzzle_data={puzzle} />
+                    </Grid>
                 )
             })
             }
-        </>
+        </Grid>
     );
 }
 

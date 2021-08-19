@@ -42,6 +42,7 @@ export const signUp = async (req, res) => {
 export const getUser = async (req, res) => {
     try {
         const user = await Users.findOne({ "userID": req.params.id })
+        delete user.password;
         res.status(200).json(user);
     } catch (err) {
         res.status(409).json({ message: err.message });

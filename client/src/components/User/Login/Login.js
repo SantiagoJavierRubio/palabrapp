@@ -36,7 +36,7 @@ const Login = (props) => {
                     <form onSubmit={handleSubmit} className={classes.loginForm}>
                         <TextField required id="login-id" label="User ID" type="text" inputProps={{ minLength: 6, maxLength: 20 }} />
                         <TextField required id="login-password" label="Password" type="password" inputProps={{ minLength: 6, maxLength: 15 }} />
-                        <Button variant="contained" type="submit">Login</Button>
+                        <Button variant="contained" color="primary" type="submit">Login</Button>
                     </form>
                     <Box className={classes.loginNew}>
                         <Typography variant="h6" className={classes.newText}>New?</Typography>

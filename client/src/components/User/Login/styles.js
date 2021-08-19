@@ -9,7 +9,7 @@ export default makeStyles(()=>({
         display: 'flex',
         width: 'fit-content',
         height: 'fit-content',
-        backgroundColor: '#999',
+        backgroundColor: 'rgb(234,234,234)',
         border: '3px solid black',
         boxShadow: '1px 1px',
     },
