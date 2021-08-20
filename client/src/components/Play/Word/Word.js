@@ -18,7 +18,7 @@ const Word = (props) => {
                     a++;
                     if(word === ""){
                         return(
-                            <Grid key={word+a} className={classes.wordContainer} container justifyContent="flex-end" spacing={1} item>
+                            <Grid key={word+a} className={classes.wordContainerLeft} container justifyContent="flex-end" spacing={1} item>
                                     <Grid className={classes.letter} item>
                                             <p> </p>
                                     </Grid>
@@ -27,12 +27,12 @@ const Word = (props) => {
                     } else {
                         let i = -1;
                         return(
-                            <Grid key={word+a} className={classes.wordContainer} container justifyContent="flex-end" spacing={1} item>
+                            <Grid key={word+a} className={classes.wordContainerLeft} container spacing={1} justifyContent="flex-end" item>
                             {word.split('').map(letter =>{
                                 i++;
                                 return(
                                     <Grid key={i} className={classes.letter} item>
-                                        <Letter id={`l-${layout.left.indexOf(word, a)}-${i}`} setValue={setValue} />
+                                        <Letter id={`l-${layout.left.indexOf(word, a)}-${i}`} setValue={setValue} position="" />
                                     </Grid>
                                 )
                                 
@@ -50,12 +50,12 @@ const Word = (props) => {
                     b++;
                     let i = -1;
                     return(
-                        <Grid key={word+b} className={classes.wordContainer} container justifyContent="center" spacing={1} item>
+                        <Grid key={word+b} className={classes.wordContainerCenter} container justifyContent="center" spacing={1} item>
                         {word.split('').map(letter =>{
                             i++;
                             return(
                                 <Grid key={i} className={classes.letter} item>
-                                        <Letter id={`c-${layout.center.indexOf(word, b)}-${i}`} setValue={setValue} />
+                                        <Letter id={`c-${layout.center.indexOf(word, b)}-${i}`} setValue={setValue} position="center" />
                                 </Grid>
                             )
                         })}
@@ -71,7 +71,7 @@ const Word = (props) => {
                     c++;
                     if(word === ""){
                         return(
-                            <Grid key={word+c} className={classes.wordContainer} container justifyContent="flex-start" spacing={1} item>
+                            <Grid key={word+c} className={classes.wordContainerRight} container  spacing={1} item>
                                     <Grid className={classes.letter} item>
                                         <p> </p>
                                     </Grid>
@@ -80,12 +80,12 @@ const Word = (props) => {
                     } else {
                         let i=-1;
                         return(
-                            <Grid key={word+c} className={classes.wordContainer} container justifyContent="flex-start" spacing={1} item>
+                            <Grid key={word+c} className={classes.wordContainerRight} container spacing={1} item>
                             {word.split('').map(letter =>{
                                 i++;
                                 return(
                                     <Grid key={i} className={classes.letter} item>
-                                            <Letter id={`r-${layout.right.indexOf(word, c)}-${i}`} setValue={setValue} />
+                                            <Letter id={`r-${layout.right.indexOf(word, c)}-${i}`} setValue={setValue} position="" />
                                     </Grid>
                                 )
                             })}

@@ -91,16 +91,19 @@ const Form = () => {
         setUI('loading');
         const user_id = localStorage.getItem('user');
         if(user_id){
-            const user_data = await axios.get(`http://localhost:5000/user/${user_id}`);
+            const response = await axios.get(`http://localhost:5000/user/${user_id}`);
+            const user_data = {
+                userID: response.data.userID,
+                username: response.data.username
+            }
             if(user_data){
                 try{
                     axios.post('http://localhost:5000/posts/new', {
                         secret: puzzle.secret,
                         words: puzzle.words,
                         definitions: puzzle.definitions,
-                        creator: user_data.data
+                        creator: user_data
                     });
-                    console.log(user_data);
                     setUI('done');
                 } catch (err) {
                     setUI('error');
@@ -128,7 +131,7 @@ const Form = () => {
     switch(UIState){
         case 'start':
             return(
-                <form onSubmit={handleSubmit} className={classes.secretForm}>
+                <form onSubmit={handleSubmit} className={classes.secretForm} autoComplete="off" >
                     <TextField fullWidth label="Your secret word" inputProps={{maxLength: 12}} onChange={(e) => setInput(e.target.value)} id="secret-input" error={inputError.bool} helperText={inputError.msg} className={classes.inputText}/>
                     <Button variant="contained" color="primary" type="submit" endIcon={<ArrowForwardIcon />}>Create</Button>
                 </form>

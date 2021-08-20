@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 // Material-UI imports
 import { 
     Container, AppBar, Typography, Grow, Toolbar, IconButton, Drawer,
@@ -17,6 +17,7 @@ import Form from './components/Form/Form';
 import Lobby from './components/Lobby/Lobby';
 import Play from './components/Play/Play';
 import UserManagement from './components/User/UserManagement';
+import Profile from './components/Profile/Profile';
 
 // Styles import
 import useStyles from './styles';
@@ -53,7 +54,7 @@ const App = () => {
     const classes = useStyles();
     
     return(
-        <Container maxWidth="lg">
+        <Container disableGutters={true}>
             <AppBar position="static" color="inherit" className={classes.appBar}>
                 <Toolbar>
                     <IconButton edge="start" onClick={toggleDrawer}>
@@ -67,7 +68,7 @@ const App = () => {
                                     <ListItemText primary="Lobby" />
                                 </ListItemIcon>
                             </ListItemLink>
-                            <ListItemLink href="/profile">
+                            <ListItemLink href={"/profile/" + user}>
                                 <ListItemIcon>
                                     <AccountCircleIcon />
                                     <ListItemText primary="Profile" />
@@ -87,7 +88,11 @@ const App = () => {
                             </ListItem>
                         </List>
                     </Drawer>
-                    <Typography variant="h1" align="center" className={classes.mainHeader} href="/">PalabrApp</Typography>
+                    <a href={'/'} className={classes.mainHeaderLink}>
+                        <Box>
+                            <Typography variant="h1" align="center" className={classes.mainHeader} href="/">PalabrApp</Typography>
+                        </Box>
+                    </a>
                     {user ? 
                         <>
                             <PersonIcon /><p>{user}</p><Button onClick={handleLogOut} >(Sign out)</Button>
@@ -99,12 +104,13 @@ const App = () => {
                 </Toolbar>
             </AppBar>
             <Grow in>
-                <Container>
+                <Container disableGutters={true} className={classes.appContainer}>
                    <Router>
                        <Switch>
                             <Route path="/lobby" component={Lobby} />
                             <Route path="/create" component={Form} />
                             <Route path="/play/:id" component={Play} />
+                            <Route path="/profile/:id" component={Profile} />
                        </Switch>
                    </Router>
                 </Container>

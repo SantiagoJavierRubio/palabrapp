@@ -1,4 +1,5 @@
 import Users from '../models/users.js';
+import PostPuzzle from '../models/postPuzzle.js';
 import bcrypt from 'bcryptjs';
 
 
@@ -61,6 +62,17 @@ export const authUser = async (req,res) => {
             res.status(200).json(user_data);
         }
     });
+}
+
+export const getPuzzles = async (req,res) => {
+    const user = req.params.id;
+    try{
+       const puzzles = await PostPuzzle.find({"creator.userID": user});
+       res.status(200).json({puzzles: puzzles});
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+    
 }
 
 // Only to clean data during production, remove before build.

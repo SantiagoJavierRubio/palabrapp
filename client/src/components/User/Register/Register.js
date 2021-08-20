@@ -7,7 +7,7 @@ import useStyles from './styles';
 
 const Register = (props) => {
 
-    const { logUser, toggleRegister, toggleView } = props;
+    const { toggleRegister, toggleView } = props;
 
     const [idHelp, setIdHelp] = useState({ text: 'You will need this to log in later', error: false });
     const [showModal, setModal] = useState(true);
@@ -22,12 +22,17 @@ const Register = (props) => {
             username: document.getElementById('register-name').value,
             password: document.getElementById('register-password').value
         }
-        let check_user = await axios.get(`http://localhost:5000/user/${userInput.id}`);
+        let check_user = {data: false}
+        try {
+            let check_user = await axios.get(`http://localhost:5000/user/${userInput.id}`);
+        } catch {
+            let check_user = {data: false}
+        }
         if(check_user.data){
             setIdHelp({ text: 'ID taken, try another.', error: true});
         } else {
             try{
-                axios.post('http://localhost:5000/user/new', userInput);
+                await axios.post('http://localhost:5000/user/new', userInput);
                 const user_data = await axios.get(`http://localhost:5000/user/${userInput.id}`);
                 setRegistred(true);
             } catch (err) {

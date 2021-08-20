@@ -12,7 +12,7 @@ const Definition = (props) => {
         <>
             <Card variant="outlined" className={classes.definitionCard}>
                 <CardContent>
-                    <Typography variant="h5">
+                    <Typography variant="h5" className={classes.definitionText}>
                         {definition}
                     </Typography>
                 </CardContent>

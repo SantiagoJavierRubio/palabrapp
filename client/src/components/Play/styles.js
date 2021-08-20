@@ -1,16 +1,18 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
-    root: {
-        flexGrow: 1,
-    },
-    puzzleContainer: {
-        padding: "none",
-        paddingTop: "5vh",
-        fontSize: "5vh",
+    puzzleBox: {
+        display: 'flex',
+        marginTop: '.5rem',
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        marginBottom: '1rem'
     },
     sideContainer: {
         flexWrap: "nowrap",
+        width: 'fit-content',
+        flexDirection: "column",
     },
     loadingCircle: {
         display: 'flex',

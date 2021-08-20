@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Grid, CircularProgress, Box } from '@material-ui/core';
 import useStyles from './styles';
@@ -14,6 +14,7 @@ const Play = ({ match }) => {
     const [indexMap, setIndexMap] = useState([]);
     const [defined, setDefined] = useState("");
     const [UIState, setUI] = useState('');
+    const [focused, setFocus] = useState('root');
 
     const classes = useStyles();
 
@@ -25,8 +26,23 @@ const Play = ({ match }) => {
         if(puzzle.secret){
             createLayout();
             createUsrInput();
+            setFocus('c-0-0');
         }
     }, [puzzle]);
+
+    useEffect(()=>{
+        document.getElementById(focused).focus();
+    }, [focused])
+
+    const id_match = new RegExp(/(?!-)[0-9]*/, 'g');
+
+    useMemo(() => {
+        if(puzzle.definitions){
+            const indexes = focused.match(id_match);
+            const new_def = puzzle.definitions[indexes[1]];
+            setDefined(new_def);
+        }
+    }, [focused])
 
     const createUsrInput = () => {
         const newUsrInput = [];
@@ -96,7 +112,6 @@ const Play = ({ match }) => {
         const emptyIndexPre = checkIndexes(word);
         if (emptyIndexPre === -1){
             inputCoords.y = nextIndex;
-            setDefined(puzzle.definitions[nextIndex]);
             inputCoords.x = 0; 
             inputCoords.displace = 0;
             return manageNext(inputCoords, newUsrInput);
@@ -105,18 +120,58 @@ const Play = ({ match }) => {
             const emptyIndexPost = checkIndexes(word, inputCoords.x+inputCoords.displace)
             if (emptyIndexPost !== -1){
                 let target = indexMap[inputCoords.y][emptyIndexPost][0];
-                return document.getElementById(target).focus();
+                return setFocus(target);
             } else {
             // if empty before
                 let target = indexMap[inputCoords.y][emptyIndexPre][0];
-                return document.getElementById(target).focus();
+                return setFocus(target);;
             }
         }
     }
 
+    // Manages navigation when some special keys are pressed on input
+
+    const manageNavigation = (key, inputCoords) => {
+        const inputSum = inputCoords.x+inputCoords.displace;
+        switch (key){
+            case "backspace":
+            case "backward":
+                if(inputSum !== 0){
+                    const target = indexMap[inputCoords.y][inputSum-1][0];
+                    return setFocus(target);; 
+                } else {
+                    return;
+                }
+            case "forward":
+                if(inputSum < indexMap[inputCoords.y].length-1){
+                    const target = indexMap[inputCoords.y][inputSum+1][0];
+                    return setFocus(target);; 
+                } else {
+                    return;
+                }
+            case "up":
+                if(inputCoords.y !== 0){
+                    const target = indexMap[inputCoords.y-1][0][0];
+                    return setFocus(target);;
+                } else {
+                    return;
+                }
+            case "down":
+                if(inputCoords.y < puzzle.secret.length-1){
+                    const target = indexMap[inputCoords.y+1][0][0];
+                    return setFocus(target);;
+                } else {
+                    return;
+                }
+            case "pointer":
+                const target = indexMap[inputCoords.y][inputSum][0];
+                return setFocus(target);
+            default:
+                return;
+        }
+    }
+
     // Gets values from each letter on every input (the data has input value and letter id) - Creates a map of inputs and ids
-   
-    const id_match = new RegExp(/(?!-)[0-9]*/, 'g');
 
     const getValue = (value) => {
         const newUsrInput = [...usrInput];
@@ -135,12 +190,17 @@ const Play = ({ match }) => {
             };
         };
 
+        if(value.key){
+            manageNavigation(value.key, inputCoords);
+        }
+
         newUsrInput[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.value;
         newIndexMap[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.id;
 
         loadInput(newUsrInput);
-        setDefined(puzzle.definitions[value.id[2]]);
-        if (value.value !== ''){
+        setIndexMap(newIndexMap);
+
+        if (value.value !== '' && !value.key){
             manageNext(inputCoords, newUsrInput);
         }
     }
@@ -148,17 +208,17 @@ const Play = ({ match }) => {
     if(UIState === 'done'){
         return(
             <>
-            <Grid container className={classes.puzzleContainer} alignItems="center" justifyContent="center" >
-                <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
+            <Box component="span" className={classes.puzzleBox} >
+                <Grid container className={classes.sideContainer}>
                     <Word layout={layout} position={"left"} setValue={getValue} />
                 </Grid> 
-                <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={1}>
+                <Grid container className={classes.sideContainer}>
                     <Word layout={layout} position={"center"} setValue={getValue} />
                 </Grid> 
-                <Grid container className={classes.sideContainer} spacing={0} direction="column" alignItems="center" justifyContent="space-evenly" item xs={5}>
+                <Grid container className={classes.sideContainer}>
                     <Word layout={layout} position={"right"} setValue={getValue} />
                 </Grid>
-            </Grid>
+            </Box>
             <Definition definition={defined} />
             </>
         )

@@ -1,33 +1,70 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
-    root: {
+    wordContainerLeft: {
+        paddingTop: '1.5vh',
+        display: 'flex',
+        justifyContent: "flex-end",
+        flexWrap: "nowrap",
         flexGrow: 1,
     },
-    wordContainer: {
+    wordContainerCenter: {
+        paddingTop: '1.5vh',
+        paddingRight: '.7vw',
+        paddingLeft: '.7vw',
+        display: 'flex',
+        justifyContent: "center",
         flexWrap: "nowrap",
-        width: "100%",
+        flexGrow: 1,
+        width: 'fit-content',
+    },
+    wordContainerRight: {
+        paddingTop: '1.5vh',
+        display: 'flex',
+        justifyContent: "flex-start",
+        flexWrap: "nowrap",
+        flexGrow: 1,
     },
     letter: {
-        height: "100%",
-        minHeight: "10vh",
-        width: "7vw",
-        minWidth: "5vw",
-        maxWidth: "10vw",
+        width: '5vw',
+        height: '5vw',
         justifyContent: "space-evenly",
         alignItems: "center",
         textAlign: "center",
     },
+    sideLetter: {
+        backgroundColor: 'rgb(0,100,40)'
+    },
     paper: {
         height: "100%",
-        width: "100%"
+        width: "100%",
+        display: 'flex',
+        alignItems: "center",
+        justifyContent: 'center',
+    },
+    paperCenter: {
+        height: "100%",
+        width: "100%",
+        display: 'flex',
+        alignItems: "center",
+        justifyContent: 'center',
+        backgroundColor: 'beige'
     },
     letterInput: {
         textTransform: "uppercase",
-        paddingBottom: '.5rem',
         textAlign: "center",
-        fontSize: "80%",
-        width: "80%",
+        fontSize: '3.5vw',
+        height: '80%',
+        width: '100%',
         border: "none",
+    },
+    letterInputCenter: {
+        textTransform: "uppercase",
+        textAlign: "center",
+        fontSize: '3.5vw',
+        height: '80%',
+        width: '100%',
+        border: "none",
+        backgroundColor: 'beige'
     }
 }))
