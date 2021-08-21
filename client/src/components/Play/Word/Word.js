@@ -1,106 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Letter from './Letter';
+import CompletedLetter from './CompletedLetter';
 import { Grid } from '@material-ui/core';
 import useStyles from './styles';
 
 
 const Word = (props) => {
 
-    const { layout, position, setValue } = props;
+    const { layout, position, setValue, gameState } = props;
+    const [cssClass, setClass] = useState();
 
     const classes = useStyles();
 
-    switch (position) {
-        case "left":
-            let a=-1;
-            return(
-                layout.left.map(word => {
-                    a++;
-                    if(word === ""){
-                        return(
-                            <Grid key={word+a} className={classes.wordContainerLeft} container justifyContent="flex-end" spacing={1} item>
-                                    <Grid className={classes.letter} item>
-                                            <p> </p>
-                                    </Grid>
-                            </Grid>
-                        );
-                    } else {
-                        let i = -1;
-                        return(
-                            <Grid key={word+a} className={classes.wordContainerLeft} container spacing={1} justifyContent="flex-end" item>
-                            {word.split('').map(letter =>{
-                                i++;
-                                return(
-                                    <Grid key={i} className={classes.letter} item>
-                                        <Letter id={`l-${layout.left.indexOf(word, a)}-${i}`} setValue={setValue} position="" />
-                                    </Grid>
-                                )
-                                
-                            })}
-                            </Grid>
-                        );
-                    }; 
-                })
-            );
+    useEffect(()=>{
+        switch(position){
+            case "left":
+                return setClass(classes.wordContainerLeft);
+            case "center":
+                return setClass(classes.wordContainerCenter);
+            case "right":
+                return setClass(classes.wordContainerRight);
+        }
+    }, [])
 
-        case "center":
-            let b = -1;
-            return(
-                layout.center.map(word => {
-                    b++;
-                    let i = -1;
-                    return(
-                        <Grid key={word+b} className={classes.wordContainerCenter} container justifyContent="center" spacing={1} item>
-                        {word.split('').map(letter =>{
-                            i++;
+    return(
+        layout[`${position}`].map((word, wordIndex) => {
+            if(word === ""){
+                return(
+                    <Grid key={word+wordIndex} className={cssClass} container spacing={1} item>
+                            <Grid className={classes.letter} item>
+                                    <p> </p>
+                            </Grid>
+                    </Grid>
+                );
+            } else {
+                return(
+                    <Grid key={word+wordIndex} className={cssClass} container spacing={1} item>
+                    {word.split('').map((letter, letterIndex) =>{
+                        if(gameState.correct.includes(wordIndex)){
                             return(
-                                <Grid key={i} className={classes.letter} item>
-                                        <Letter id={`c-${layout.center.indexOf(word, b)}-${i}`} setValue={setValue} position="center" />
+                                <Grid key={letterIndex} className={classes.letter} item>
+                                    <CompletedLetter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} correctLetter={letter} position={position} />
                                 </Grid>
                             )
-                        })}
-                        </Grid>
-                    );
-                })
-            );
-
-        case "right":
-            let c = -1;
-            return(
-                layout.right.map(word => {
-                    c++;
-                    if(word === ""){
-                        return(
-                            <Grid key={word+c} className={classes.wordContainerRight} container  spacing={1} item>
-                                    <Grid className={classes.letter} item>
-                                        <p> </p>
-                                    </Grid>
-                            </Grid>
-                        );
-                    } else {
-                        let i=-1;
-                        return(
-                            <Grid key={word+c} className={classes.wordContainerRight} container spacing={1} item>
-                            {word.split('').map(letter =>{
-                                i++;
-                                return(
-                                    <Grid key={i} className={classes.letter} item>
-                                            <Letter id={`r-${layout.right.indexOf(word, c)}-${i}`} setValue={setValue} position="" />
-                                    </Grid>
-                                )
-                            })}
-                            </Grid>
-                        );
-                    }
-                })
-            );
-
-        default:
-            return (
-                <>
-                </>
-            )
-    }
+                        } else {
+                            return(
+                                <Grid key={letterIndex} className={classes.letter} item>
+                                    <Letter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} position={position} />
+                                </Grid>
+                            )
+                        }
+                    })}
+                    </Grid>
+                );
+            }; 
+        })
+    );
 }
 
 export default Word;

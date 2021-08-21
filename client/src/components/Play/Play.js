@@ -1,22 +1,28 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { Grid, CircularProgress, Box } from '@material-ui/core';
+import { Grid, CircularProgress, Box, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import useStyles from './styles';
 import Word from './Word/Word';
 import Definition from './Definition/Definition'
+import Winner from './Winner/Winner';
 
 const Play = ({ match }) => {
 
     const [puzzle, loadPuzzle] = useState({});
     const [layout, loadLayout] = useState({left: [], center: [], right: []});
-    const [usrInput, loadInput] = useState({});
+    const [usrInput, loadInput] = useState([]);
     const [solution, loadSolution] = useState([]);
     const [indexMap, setIndexMap] = useState([]);
     const [defined, setDefined] = useState("");
     const [UIState, setUI] = useState('');
     const [focused, setFocus] = useState('root');
+    const [gameState, setGameState] = useState({incomplete: [], wrong: [], correct: []});
 
     const classes = useStyles();
+
+    // Game and UI set up.
 
     useEffect(() => {
         fetchPuzzle();
@@ -29,43 +35,6 @@ const Play = ({ match }) => {
             setFocus('c-0-0');
         }
     }, [puzzle]);
-
-    useEffect(()=>{
-        document.getElementById(focused).focus();
-    }, [focused])
-
-    const id_match = new RegExp(/(?!-)[0-9]*/, 'g');
-
-    useMemo(() => {
-        if(puzzle.definitions){
-            const indexes = focused.match(id_match);
-            const new_def = puzzle.definitions[indexes[1]];
-            setDefined(new_def);
-        }
-    }, [focused])
-
-    const createUsrInput = () => {
-        const newUsrInput = [];
-        const newSolution = [];
-        const newIndexMap = [];
-
-        for (let i=0; i < puzzle.secret.length; i++){
-            newUsrInput.push([]);
-            newSolution.push([]);
-            newIndexMap.push([]);
-            puzzle.words[i].forEach(sector => {
-                sector.split('').forEach(letter => {
-                    newUsrInput[i].push([]);
-                    newIndexMap[i].push([]);
-                    newSolution[i].push([letter]);
-                });
-            });
-        }
-        loadSolution(newSolution);
-        loadInput(newUsrInput);
-        setIndexMap(newIndexMap);
-        setUI('done');
-    }
 
     const fetchPuzzle = async () => {
         const response = await axios.get(`http://localhost:5000/posts/${match.params.id}`)
@@ -85,7 +54,50 @@ const Play = ({ match }) => {
         loadLayout(new_layout);
     }
 
-    // Custom function to get index of empty char
+    const createUsrInput = () => {
+        const newUsrInput = [];
+        const newSolution = [];
+        const newIndexMap = [];
+
+        for (let i=0; i < puzzle.secret.length; i++){
+            newUsrInput.push([]);
+            let sol = '';
+            newIndexMap.push([]);
+            puzzle.words[i].forEach(sector => {
+                sector.split('').forEach(letter => {
+                    newUsrInput[i].push([]);
+                    newIndexMap[i].push([]);
+                });
+                sol += sector.toUpperCase();
+            });
+            newSolution.push(sol);
+        }
+
+        loadSolution(newSolution);
+        loadInput(newUsrInput);
+        setIndexMap(newIndexMap);
+        setUI('done');
+    }
+
+
+    // Input and output management
+
+    // Sets the focus to the target of the focus state
+    useEffect(()=>{
+        document.getElementById(focused).focus();
+    }, [focused]);
+
+    // Updates the definition of the Definition component on focus change
+    const id_match = new RegExp(/(?!-)[0-9]*/, 'g');
+    useMemo(() => {
+        if(puzzle.definitions){
+            const indexes = focused.match(id_match);
+            const new_def = puzzle.definitions[indexes[1]];
+            setDefined(new_def);
+        }
+    }, [focused]);
+
+    // Custom function to get index of next empty char
     const checkIndexes = (word, index=0) => {
         for (let i=index; i<word.length; i++){
             if (word[i] == ""){
@@ -97,8 +109,9 @@ const Play = ({ match }) => {
     // Manage auto focus to next empty letter or word
     const manageNext = (inputCoords, newUsrInput) => {
         // if all places filled dont focus other
-        if(newUsrInput.toString().length === solution.toString().length){
-            return
+        const check_complete = newUsrInput.toString().replaceAll(',', '');
+        if(check_complete.length === solution.toString().length-solution.length+1){
+            return;
         }
     
         // if last word is completed
@@ -194,7 +207,7 @@ const Play = ({ match }) => {
             manageNavigation(value.key, inputCoords);
         }
 
-        newUsrInput[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.value;
+        newUsrInput[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.value.toUpperCase();
         newIndexMap[inputCoords.y][inputCoords.x+inputCoords.displace][0] = value.id;
 
         loadInput(newUsrInput);
@@ -205,30 +218,127 @@ const Play = ({ match }) => {
         }
     }
 
-    if(UIState === 'done'){
-        return(
-            <>
-            <Box component="span" className={classes.puzzleBox} >
-                <Grid container className={classes.sideContainer}>
-                    <Word layout={layout} position={"left"} setValue={getValue} />
-                </Grid> 
-                <Grid container className={classes.sideContainer}>
-                    <Word layout={layout} position={"center"} setValue={getValue} />
-                </Grid> 
-                <Grid container className={classes.sideContainer}>
-                    <Word layout={layout} position={"right"} setValue={getValue} />
-                </Grid>
-            </Box>
-            <Definition definition={defined} />
-            </>
-        )
-    } else {
-        return (
-            <Box className={classes.loadingCircle}>
-                <CircularProgress />
-            </Box>
-        )
+    // Game state management, give the user feedback.
+
+        // updates the gameState
+        const checkSolutions = (solutionCheck) => {
+            const wordState = {
+                incomplete: [],
+                wrong: [],
+                correct: []
+            }
+            solution.forEach((solution, index)=>{
+                if(solutionCheck[index].length === solution.length){
+                    if(solution === solutionCheck[index]){
+                        wordState.correct.push(index);
+                    } else {
+                        wordState.wrong.push(index);
+                    }
+                } else {
+                    wordState.incomplete.push(index);
+                }
+            })
+            setGameState(wordState);
+        }
+    
+        useEffect(()=>{
+            const solutionCheck = [];
+            usrInput.forEach(word => {
+                solutionCheck.push(word.toString().replaceAll(',','').toUpperCase())
+            });
+            checkSolutions(solutionCheck);
+        }, [usrInput]);
+    
+    
+        useMemo(()=>{
+            if(puzzle.secret){
+                if(gameState.correct.length === puzzle.secret.length){
+                    setUI('win');
+                } else {
+                    return;
+                }
+            }
+        }, [gameState]);
+
+
+
+    // Render
+
+    switch(UIState){
+        case 'done':
+            return(
+                <>
+                <Link to="/lobby">
+                    <ArrowBackIosIcon />
+                </Link>
+                <Box component="span" className={classes.puzzleBox} >
+                    <Grid container className={classes.sideContainer}>
+                        <Word layout={layout} position={"left"} setValue={getValue} gameState={gameState} />
+                    </Grid> 
+                    <Grid container className={classes.sideContainer}>
+                        <Word layout={layout} position={"center"} setValue={getValue} gameState={gameState}/>
+                    </Grid> 
+                    <Grid container className={classes.sideContainer}>
+                        <Word layout={layout} position={"right"} setValue={getValue} gameState={gameState} />
+                    </Grid>
+                </Box>
+                <Definition definition={defined} />
+                </>
+            )
+        case 'win':
+            if(localStorage.getItem('user')){
+                return(
+                    <>
+                        <Button onClick={()=>setUI('done')}>
+                            <ArrowBackIosIcon />
+                        </Button>
+                        <Winner puzzleID={match.params.id} />
+                        
+                    </>
+                )
+            } else {
+                return(
+                    <>
+                        <Button onClick={()=>setUI('done')}>
+                            <ArrowBackIosIcon />
+                        </Button>
+                        <h1>Well done! Sign in to register your achievements</h1>
+                    </>
+                )
+            }
+
+        default:
+            return(
+                <Box className={classes.loadingCircle}>
+                    <CircularProgress />
+                </Box>
+            )
     }
+
+    // if(UIState === 'done'){
+    //     return(
+    //         <>
+    //         <Box component="span" className={classes.puzzleBox} >
+    //             <Grid container className={classes.sideContainer}>
+    //                 <Word layout={layout} position={"left"} setValue={getValue} />
+    //             </Grid> 
+    //             <Grid container className={classes.sideContainer}>
+    //                 <Word layout={layout} position={"center"} setValue={getValue} />
+    //             </Grid> 
+    //             <Grid container className={classes.sideContainer}>
+    //                 <Word layout={layout} position={"right"} setValue={getValue} />
+    //             </Grid>
+    //         </Box>
+    //         <Definition definition={defined} />
+    //         </>
+    //     );
+    // } else {
+    //     return (
+    //         <Box className={classes.loadingCircle}>
+    //             <CircularProgress />
+    //         </Box>
+    //     )
+    // }
 }
 
 export default Play

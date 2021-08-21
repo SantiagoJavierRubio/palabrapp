@@ -19,7 +19,7 @@ const Puzzles = () => {
         loadPuzzles(response.data);
     }
 
-    if(puzzles !== []){
+    if(puzzles[0]){
         return(
             <Grid className={classes.gridContainer} container alignItems="stretch" spacing={3} >
                 {puzzles.map(puzzle => {

@@ -10,7 +10,7 @@ import useStyles from './styles';
 const Puzzle = (props) => {
     const classes = useStyles();
     const { puzzle_data } = props
-    const { _id, rating, createdAt, secret, words, creator } = puzzle_data;
+    const { _id, stats, createdAt, secret, words, creator } = puzzle_data;
 
     return(
         <Card className={classes.puzzleCard}>
@@ -34,13 +34,13 @@ const Puzzle = (props) => {
                     </Typography>
                 </div>
                 <div className={classes.ratingContent}>
-                    {rating===0 ? (
+                    {stats.rating===0 ? (
                         <Typography variant="body2" className={classes.ratingText}>
                             Rating: No ratings yet
                         </Typography>
                     ):(
                         <Typography variant="body2" className={classes.ratingText}>
-                            Rating: {rating}/10
+                            Rating: {stats.rating.toFixed(2)}/5
                         </Typography>
                     )}
                 </div>

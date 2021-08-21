@@ -51,7 +51,41 @@ export const getWords = async (req, res) => {
 export const getPuzzle = async (req, res) => {
     try {
         const word = await PostPuzzle.findById(req.params.id);
+        word.played();
+        await word.save();
         res.status(200).json(word);
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+}
+
+export const setCompleted = async (req,res) => {
+    const clientData = req.body;
+    try{
+        const user = await Users.findOne({ "userID": clientData.userID });
+        user.completedPuzzle(clientData.puzzleID);
+        await user.save();
+        delete user.password;
+        const puzzle = await PostPuzzle.findById(clientData.puzzleID);
+        puzzle.completed();
+        await puzzle.save();
+        res.status(200).json({ puzzle: puzzle, user: user });
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+    
+}
+
+export const setRating = async (req, res) => {
+    const clientData = req.body;
+    try{
+        const puzzle = await PostPuzzle.findById(clientData.puzzleID);
+        puzzle.rate(clientData.rating)
+        await puzzle.save();
+        const user = await Users.findOne({ "userID": clientData.userID });
+        user.ratedPuzzle(clientData.puzzleID);
+        await user.save()
+        res.status(200).json(puzzle);
     } catch (err) {
         res.status(409).json({ message: err.message });
     }

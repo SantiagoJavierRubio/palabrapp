@@ -24,13 +24,13 @@ const UserProfile = (props) => {
         if(puzzles){
             let sum = 0;
             for(let puzzle of puzzles){
-                sum += puzzle.rating;
+                sum += puzzle.stats.rating;
             }
             if(sum === 0){
                 setAvgRating(0);
             } else {
                 const avg = sum / puzzles.length;
-                setAvgRating(avg);
+                setAvgRating(avg.toFixed(2));
             }
         }
     }, [puzzles]);
