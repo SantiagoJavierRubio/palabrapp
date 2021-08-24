@@ -5,7 +5,10 @@ const postSchema = mongoose.Schema({
     secret: String,
     words: [Object],
     definitions: [Object],
-    creator: Object,
+    creator: {
+        userID: String,
+        username: String
+    },
     stats: {
         timesPlayed: {
             type: Number,

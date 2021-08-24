@@ -53,7 +53,13 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     const input_data = req.body;
     try{
-        const user = await Users.findOne({ "userID":input_data.userID });
+        const user = await Users.findOne({ "userID": input_data.userID });
+        const user_puzzles = await PostPuzzle.find({ '_id': {$in: user.puzzles} }, (err, docs) => {
+            docs.forEach(doc => {
+                doc.creator.username = input_data.input.username;
+                doc.save();
+            })
+        })
         user.username = input_data.input.username;
         user.profile.about = input_data.input.about;
         user.profile.image = input_data.input.image;

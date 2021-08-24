@@ -48,7 +48,7 @@ const UserProfile = (props) => {
                     <Box component="div" className={classes.moreInfo}>
                         <div className={classes.about}>
                             <Typography variant="h6" className={classes.aboutHeader}>About me</Typography>
-                            <Typography variant="body2" className={classes.aboutText}>[Placeholder text] Car Pintos ha desarrollado un estilo estridente y particular a través de su recorrido por el alma de la naturaleza. Diseñadora gráfica e ilustradora Argentina. Estudió en la Universidad de Buenos Aires graduándose con Honores en la FADU. Su trabajo recorre varios países como USA, Rusia, Ucrania, entre otros.</Typography>
+                            <Typography variant="body2" className={classes.aboutText}>{userData.profile.about}</Typography>
                         </div>
                         <div className={classes.puzzlesData}>
                             <Typography variant="h6" className={classes.dataText}>Puzzles solved: {userData.points}</Typography>
