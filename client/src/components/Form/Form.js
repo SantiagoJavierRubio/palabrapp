@@ -39,6 +39,7 @@ const Form = () => {
         while(usedWords.includes(word.palabra)){
             word = validSet[Math.floor(Math.random()*validSet.length)]
         }
+        word.palabra = word.palabra.normalize("NFD").replace(valid_chars, "");
         return word;        
     }
 
@@ -64,7 +65,6 @@ const Form = () => {
             word_set.push(word_arrangement);
             definition_set.push(cross_word.definicion)
         }
-        setUI('puzzle')
         return {
             clue: questionInputValue,
             secret: secret,
@@ -81,7 +81,9 @@ const Form = () => {
 
     useEffect(() => {
         if(validWords && secret){
-            setNewPuzzle(createNewPuzzle);
+            const new_puzzle = createNewPuzzle();
+            setNewPuzzle(new_puzzle);
+            setUI('puzzle');
         }
     }, [validWords]);
 
@@ -119,8 +121,11 @@ const Form = () => {
         }
     }
 
-    const handleResetWords = () => {
-        setNewPuzzle(createNewPuzzle);
+    const handleResetWords = async () => {
+        setUI('loading');
+        const new_puzzle = await createNewPuzzle();
+        setNewPuzzle(new_puzzle);
+        setUI('puzzle');
     }
 
     const handleChangeSecret = () => {

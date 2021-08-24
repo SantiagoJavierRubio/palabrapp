@@ -22,6 +22,10 @@ export default makeStyles(() => ({
     arrowsContainer: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    puzzleClue: {
+        fontSize: '2rem',
     }
 }))
 

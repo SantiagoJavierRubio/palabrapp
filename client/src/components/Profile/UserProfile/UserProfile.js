@@ -63,7 +63,7 @@ const UserProfile = (props) => {
                         {puzzles.map(puzzle => {
                             return(
                                 <Grid item key={puzzle._id} xs={12} sm={6} md={4}>
-                                    <Puzzle puzzle_data={puzzle} />
+                                    <Puzzle puzzle_data={puzzle} ownProfileDisplay={false}/>
                                 </Grid>
                             )
                         })}

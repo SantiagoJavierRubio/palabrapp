@@ -62,8 +62,12 @@ export default makeStyles({
     },
     cardActions: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     shareBtn: {
+    },
+    dialogText: {
+        fontSize: '1.3rem'
     }
 });

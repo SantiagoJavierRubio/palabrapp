@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Button, Typography, Card, CardActions, CardContent } from '@material-ui/core';
+import { Button, Typography, Card, CardActions, CardContent, Fab, Dialog, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import moment from 'moment'
 import useStyles from './styles';
@@ -9,8 +11,21 @@ import useStyles from './styles';
 
 const Puzzle = (props) => {
     const classes = useStyles();
-    const { puzzle_data } = props
+    const { puzzle_data, ownProfileDisplay } = props
     const { _id, stats, createdAt, secret, words, creator, clue } = puzzle_data;
+    const [deleteDialogOpen, setDeleteDialog] = useState(false);
+
+    const handleDelete = () => {
+        axios.post('http://localhost:5000/posts/delete', {
+            puzzleID: _id
+        });
+        handleClose();
+        window.location.reload();
+    }
+
+    const handleClose = () => {
+        setDeleteDialog(false);
+    }
 
     return(
         <Card className={classes.puzzleCard}>
@@ -49,7 +64,31 @@ const Puzzle = (props) => {
                 </div>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button variant="outlined" color="secondary" className={classes.shareBtn}>
+                {ownProfileDisplay ? (
+                    <>
+                        <Fab onClick={()=>setDeleteDialog(true)} size="small" color="secondary">
+                            <DeleteIcon />
+                        </Fab>
+                        <Dialog open={deleteDialogOpen} onClose={handleClose}>
+                            <DialogContent>
+                                <DialogContentText className={classes.dialogText}>
+                                    Are you sure you want to delete this puzzle?
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose} color="primary" variant="contained" autoFocus>
+                                    No
+                                </Button>
+                                <Button onClick={handleDelete} color="secondary" variant="contained">
+                                    Yes, delete it.
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </>
+                ):(
+                    <Typography />
+                )}
+                <Button variant="contained" color="secondary" className={classes.shareBtn}>
                     <ShareIcon />
                 </Button>
             </CardActions>

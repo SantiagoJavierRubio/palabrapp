@@ -172,15 +172,31 @@ const Play = ({ match }) => {
                 }
             case "up":
                 if(inputCoords.y !== 0){
-                    const target = indexMap[inputCoords.y-1][0][0];
-                    return setFocus(target);;
+                    let y = inputCoords.y-1
+                    for(y; y>=0; y--){
+                        if(!gameState.correct.includes(y)){
+                            const target = indexMap[y][0][0];
+                            return setFocus(target);
+                        } else {
+                            continue;
+                        }
+                    }
+                    return;  
                 } else {
                     return;
                 }
             case "down":
                 if(inputCoords.y < puzzle.secret.length-1){
-                    const target = indexMap[inputCoords.y+1][0][0];
-                    return setFocus(target);;
+                    let y = inputCoords.y+1
+                    for(y; y<puzzle.secret.length; y++){
+                        if(!gameState.correct.includes(y)){
+                            const target = indexMap[y][0][0];
+                            return setFocus(target);
+                        } else {
+                            continue;
+                        }
+                    }
+                    return;
                 } else {
                     return;
                 }
@@ -281,11 +297,12 @@ const Play = ({ match }) => {
                     <Link to="/lobby">
                         <ArrowBackIosIcon />
                     </Link>
+                    <Typography variant="h2" className={classes.puzzleClue}>{puzzle.clue}</Typography>
                     {UIState==='back' ? (
                         <Button onClick={()=>setUI('win')}>
                             <ArrowForwardIosIcon />
                         </Button>
-                    ):(null)}
+                    ):(<Typography />)}
                 </Box>
                 <Box component="div" className={classes.puzzleBox} >
                     <Grid container className={classes.sideContainer}>

@@ -91,6 +91,15 @@ export const setRating = async (req, res) => {
     }
 }
 
+export const deletePost = async (req, res) => {
+    try{
+        await PostPuzzle.deleteOne({ '_id': req.body.puzzleID })
+        res.status(200)
+    } catch (err){
+        res.status(409).json({ message: err.message })
+    }
+}
+
 // Only to clean data during production, remove before build.
 export const emptyPosts = async (req, res) => {
     try {

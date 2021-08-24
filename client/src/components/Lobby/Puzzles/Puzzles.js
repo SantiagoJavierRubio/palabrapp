@@ -25,7 +25,7 @@ const Puzzles = () => {
                 {puzzles.map(puzzle => {
                     return(
                         <Grid key={puzzle._id} item xs={12} sm={6} md={4}>
-                            <Puzzle puzzle_data={puzzle} />
+                            <Puzzle puzzle_data={puzzle} ownProfileDisplay={false}/>
                         </Grid>
                     )
                 })
