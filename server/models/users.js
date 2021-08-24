@@ -20,6 +20,20 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    profile: {
+        about: {
+            type: String,
+            default: '-'
+        },
+        image: {
+            type: String,
+            default: ''
+        },
+        color: {
+            type: String,
+            default: 'blue'
+        }
+    },
     joinDate: {
         type: Date,
         default: new Date()

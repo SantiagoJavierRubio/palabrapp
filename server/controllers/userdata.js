@@ -50,6 +50,21 @@ export const getUser = async (req, res) => {
     }
 }
 
+export const updateUser = async (req, res) => {
+    const input_data = req.body;
+    try{
+        const user = await Users.findOne({ "userID":input_data.userID });
+        user.username = input_data.input.username;
+        user.profile.about = input_data.input.about;
+        user.profile.image = input_data.input.image;
+        user.save();
+        delete user.password;
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+}
+
 export const authUser = async (req,res) => {
     const log_data = req.body;
     const user_data = await Users.findOne({ "userID": log_data.id });

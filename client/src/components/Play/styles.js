@@ -19,5 +19,9 @@ export default makeStyles(() => ({
         justifyContent: 'center',
         marginTop: '1rem',
     },
+    arrowsContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    }
 }))
 

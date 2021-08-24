@@ -5,7 +5,7 @@ import useStyles from './styles';
 const Letter = (props) => {
     const classes = useStyles();
 
-    const { id, setValue, position } = props;
+    const { id, setValue, position, color } = props;
     const [inputLetter, setLetter] = useState("");
 
     useEffect(() => {
@@ -78,13 +78,13 @@ const Letter = (props) => {
     if(position === "center"){
         return (
             <Paper className={classes.paperCenter} elevation={3}>
-                <input id={id} type="text" maxLength={1} onClick={handleSelect} onChange={handleInput} value={inputLetter} className={classes.letterInputCenter} onKeyDown={handleKeyDown} autoComplete="off" />
+                <input id={id} type="text" maxLength={1} onClick={handleSelect} onChange={handleInput} value={inputLetter} className={classes.letterInputCenter} onKeyDown={handleKeyDown} autoComplete="off" style={{color: color}} />
             </Paper>
         )
     } else {
         return (
             <Paper className={classes.paper} elevation={3}>
-                <input id={id} type="text" maxLength={1} onClick={handleSelect} onChange={handleInput} value={inputLetter} className={classes.letterInput} onKeyDown={handleKeyDown} autoComplete="off" />
+                <input id={id} type="text" maxLength={1} onClick={handleSelect} onChange={handleInput} value={inputLetter} className={classes.letterInput} onKeyDown={handleKeyDown} autoComplete="off" style={{color: color}} />
             </Paper>
         )
     }

@@ -7,7 +7,8 @@ import axios from 'axios';
 const Form = () => {
     const classes = useStyles();
 
-    const [inputValue, setInput] = useState('');
+    const [secretInputValue, setSecretInput] = useState('');
+    const [questionInputValue, setQuestionInput] = useState('');
     const [secret, setSecret] = useState(null);
     const [inputError, setInputError] = useState({bool: false, msg: ''});
     const [validWords, setValidWords] = useState({});
@@ -19,8 +20,8 @@ const Form = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setUI('loading');
-        if(!valid_chars.test(inputValue)){
-            setSecret(inputValue.toUpperCase());
+        if(!valid_chars.test(secretInputValue)){
+            setSecret(secretInputValue.toUpperCase());
         } else {
             setUI('start');
             setInputError({bool: true, msg: 'Letters only'});
@@ -65,6 +66,7 @@ const Form = () => {
         }
         setUI('puzzle')
         return {
+            clue: questionInputValue,
             secret: secret,
             words: word_set,
             definitions: definition_set
@@ -85,7 +87,7 @@ const Form = () => {
 
     useEffect(() => {
         setInputError({bool: false, msg: ''});
-    }, [inputValue]);
+    }, [secretInputValue]);
 
     const handlePost = async () => {
         setUI('loading');
@@ -100,6 +102,7 @@ const Form = () => {
                 try{
                     axios.post('http://localhost:5000/posts/new', {
                         secret: puzzle.secret,
+                        clue: questionInputValue,
                         words: puzzle.words,
                         definitions: puzzle.definitions,
                         creator: user_data
@@ -132,8 +135,9 @@ const Form = () => {
         case 'start':
             return(
                 <form onSubmit={handleSubmit} className={classes.secretForm} autoComplete="off" >
-                    <TextField fullWidth label="Your secret word" inputProps={{maxLength: 12}} onChange={(e) => setInput(e.target.value)} id="secret-input" error={inputError.bool} helperText={inputError.msg} className={classes.inputText}/>
-                    <Button variant="contained" color="primary" type="submit" endIcon={<ArrowForwardIcon />}>Create</Button>
+                    <TextField fullWidth label="Question or clue" onChange={(e) => setQuestionInput(e.target.value)} id="question-input" className={classes.inputText} required/>
+                    <TextField fullWidth label="Your secret answer (1 word)" inputProps={{maxLength: 12}} onChange={(e) => setSecretInput(e.target.value)} id="secret-input" error={inputError.bool} helperText={inputError.msg} className={classes.inputText} required/>
+                    <Button variant="contained" color="primary" type="submit" className={classes.createBtn} endIcon={<ArrowForwardIcon />}>Create</Button>
                 </form>
             );
 

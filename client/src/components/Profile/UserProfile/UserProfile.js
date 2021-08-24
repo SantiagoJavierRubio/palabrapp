@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
-import Puzzle from '../../Lobby/Posts/Post/Puzzle';
+import Puzzle from '../../Lobby/Puzzles/Puzzle/Puzzle';
 import { Box, Typography, Avatar, CircularProgress, Grid } from '@material-ui/core';
 import useStyles from './styles';
 

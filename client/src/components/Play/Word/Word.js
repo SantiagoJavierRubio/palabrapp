@@ -43,10 +43,16 @@ const Word = (props) => {
                                     <CompletedLetter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} correctLetter={letter} position={position} />
                                 </Grid>
                             )
+                        } else if (gameState.wrong.includes(wordIndex)){
+                            return(
+                                <Grid key={letterIndex} className={classes.letter} item>
+                                    <Letter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} position={position} color={'red'}/>
+                                </Grid>
+                            )
                         } else {
                             return(
                                 <Grid key={letterIndex} className={classes.letter} item>
-                                    <Letter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} position={position} />
+                                    <Letter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} position={position} color={'black'}/>
                                 </Grid>
                             )
                         }

@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { Grid, CircularProgress, Box, Button } from '@material-ui/core';
+import { Grid, CircularProgress, Box, Button, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import useStyles from './styles';
 import Word from './Word/Word';
 import Definition from './Definition/Definition'
 import Winner from './Winner/Winner';
+import Login from './Login/Login';
 
 const Play = ({ match }) => {
 
@@ -19,10 +21,16 @@ const Play = ({ match }) => {
     const [UIState, setUI] = useState('');
     const [focused, setFocus] = useState('root');
     const [gameState, setGameState] = useState({incomplete: [], wrong: [], correct: []});
+    const [newLogin, setNewLogin] = useState(null)
 
     const classes = useStyles();
 
     // Game and UI set up.
+
+    const updateLogin = () => {
+        const new_login = localStorage.getItem('user');
+        setNewLogin(new_login);
+    }
 
     useEffect(() => {
         fetchPuzzle();
@@ -266,12 +274,20 @@ const Play = ({ match }) => {
 
     switch(UIState){
         case 'done':
+        case 'back':
             return(
                 <>
-                <Link to="/lobby">
-                    <ArrowBackIosIcon />
-                </Link>
-                <Box component="span" className={classes.puzzleBox} >
+                <Box className={classes.arrowsContainer}>
+                    <Link to="/lobby">
+                        <ArrowBackIosIcon />
+                    </Link>
+                    {UIState==='back' ? (
+                        <Button onClick={()=>setUI('win')}>
+                            <ArrowForwardIosIcon />
+                        </Button>
+                    ):(null)}
+                </Box>
+                <Box component="div" className={classes.puzzleBox} >
                     <Grid container className={classes.sideContainer}>
                         <Word layout={layout} position={"left"} setValue={getValue} gameState={gameState} />
                     </Grid> 
@@ -289,20 +305,27 @@ const Play = ({ match }) => {
             if(localStorage.getItem('user')){
                 return(
                     <>
-                        <Button onClick={()=>setUI('done')}>
-                            <ArrowBackIosIcon />
-                        </Button>
-                        <Winner puzzleID={match.params.id} />
+                        <Box className={classes.arrowsContainer}>
+                            <Button onClick={()=>setUI('back')}>
+                                <ArrowBackIosIcon />
+                            </Button>
+                        </Box>                    
                         
+                        <Winner puzzleID={match.params.id} />
                     </>
                 )
             } else {
                 return(
                     <>
-                        <Button onClick={()=>setUI('done')}>
-                            <ArrowBackIosIcon />
-                        </Button>
-                        <h1>Well done! Sign in to register your achievements</h1>
+                        <Box className={classes.arrowsContainer}>
+                            <Button onClick={()=>setUI('back')}>
+                                <ArrowBackIosIcon />
+                            </Button>
+                        </Box>  
+                        <Typography variant="h3">
+                            Log in to record your progress and rate the puzzle!
+                        </Typography>
+                        <Login updateLogin={updateLogin}/>
                     </>
                 )
             }
@@ -314,31 +337,6 @@ const Play = ({ match }) => {
                 </Box>
             )
     }
-
-    // if(UIState === 'done'){
-    //     return(
-    //         <>
-    //         <Box component="span" className={classes.puzzleBox} >
-    //             <Grid container className={classes.sideContainer}>
-    //                 <Word layout={layout} position={"left"} setValue={getValue} />
-    //             </Grid> 
-    //             <Grid container className={classes.sideContainer}>
-    //                 <Word layout={layout} position={"center"} setValue={getValue} />
-    //             </Grid> 
-    //             <Grid container className={classes.sideContainer}>
-    //                 <Word layout={layout} position={"right"} setValue={getValue} />
-    //             </Grid>
-    //         </Box>
-    //         <Definition definition={defined} />
-    //         </>
-    //     );
-    // } else {
-    //     return (
-    //         <Box className={classes.loadingCircle}>
-    //             <CircularProgress />
-    //         </Box>
-    //     )
-    // }
 }
 
 export default Play

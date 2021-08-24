@@ -1,5 +1,5 @@
 import React from 'react';
-import Puzzles from './Posts/Puzzles';
+import Puzzles from './Puzzles/Puzzles';
 
 const Lobby = () => {
     return(

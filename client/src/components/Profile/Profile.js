@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import UserProfile from './UserProfile/UserProfile';
+import OwnProfile from './OwnProfile/OwnProfile';
 import useStyles from './styles';
 
 const Profile = ({ match }) => {
@@ -30,8 +31,7 @@ const Profile = ({ match }) => {
         if(isOwn){
             return(
                 <>
-                    <h3 style={{color:"red"}}>This is a placeholder. Own profile will have other functionality</h3>
-                    <UserProfile userData={userData} />
+                    <OwnProfile userData={userData} />
                 </>
             )
         } else {

@@ -4,11 +4,16 @@ export default makeStyles((theme) => ({
     secretForm: {
         marginTop: '1rem',
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
     inputText: {
-        width: 'fit-content',
+        marginTop: '.5rem',
+        marginBottom: '.5rem'
+    },
+    createBtn: {
+        marginTop: '.5rem',
     },
     secretTitle: {
         textDecoration: 'underline',

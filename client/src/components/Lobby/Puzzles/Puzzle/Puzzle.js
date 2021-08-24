@@ -10,7 +10,7 @@ import useStyles from './styles';
 const Puzzle = (props) => {
     const classes = useStyles();
     const { puzzle_data } = props
-    const { _id, stats, createdAt, secret, words, creator } = puzzle_data;
+    const { _id, stats, createdAt, secret, words, creator, clue } = puzzle_data;
 
     return(
         <Card className={classes.puzzleCard}>
@@ -24,11 +24,14 @@ const Puzzle = (props) => {
             </div>
             <CardContent className={classes.cardContent}>
                 <div className={classes.mainContent}>
-                    <Link to={`/play/${_id}`} className={classes.linkContainer}>
-                        <Button startIcon={<PlayCircleFilledIcon />} color="primary" variant="contained" className={classes.playBtn}>
-                            Solve
-                        </Button>
-                    </Link>
+                    <div>
+                        <Typography className={classes.clueText}>{clue}</Typography>
+                        <Link to={`/play/${_id}`} className={classes.linkContainer}>
+                            <Button startIcon={<PlayCircleFilledIcon />} color="primary" variant="contained" className={classes.playBtn}>
+                                Solve
+                            </Button>
+                        </Link>
+                    </div> 
                     <Typography variant="body2" className={classes.lengthText}>
                         ({secret.length} characters long)
                     </Typography>
@@ -40,7 +43,7 @@ const Puzzle = (props) => {
                         </Typography>
                     ):(
                         <Typography variant="body2" className={classes.ratingText}>
-                            Rating: {stats.rating.toFixed(2)}/5
+                            Rating: {stats.rating.toFixed(1)}/5
                         </Typography>
                     )}
                 </div>

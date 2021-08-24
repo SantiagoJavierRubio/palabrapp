@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Puzzle from './Post/Puzzle';
+import Puzzle from './Puzzle/Puzzle';
 import { Grid, CircularProgress } from '@material-ui/core';
 import useStyles from './styles';
     

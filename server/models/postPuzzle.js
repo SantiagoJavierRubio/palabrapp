@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const postSchema = mongoose.Schema({
+    clue: String,
     secret: String,
     words: [Object],
     definitions: [Object],

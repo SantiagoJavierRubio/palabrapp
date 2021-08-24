@@ -36,6 +36,10 @@ export default makeStyles({
         justifyContent: 'space-between'
 
     },
+    clueText: {
+        fontStyle: 'italic',
+        fontSize: '1.3rem',
+    },
     linkContainer: {
         textDecoration: 'none',
     },
