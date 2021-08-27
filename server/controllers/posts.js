@@ -91,6 +91,18 @@ export const setRating = async (req, res) => {
     }
 }
 
+export const saveProgress = async (req,res) => {
+    const clientData = req.body;
+    try {
+        const puzzle = await PostPuzzle.findById(clientData.puzzleID);
+        await puzzle.saveProgress(clientData.userID, clientData.gameState);
+        await puzzle.save();
+        res.status(200).json(puzzle)
+    } catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+}
+
 export const deletePost = async (req, res) => {
     try{
         await PostPuzzle.deleteOne({ '_id': req.body.puzzleID })

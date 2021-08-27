@@ -23,7 +23,7 @@ const Play = ({ match }) => {
     const [gameState, setGameState] = useState({ incomplete: [], wrong: [], correct: [], vertical: false });
     const [newLogin, setNewLogin] = useState(null);
     const [winDialog, setWinDialog] = useState(false);
-    const [firstTimeWinner, setFirstTimeWinner] = useState(0);
+    const [userID, setUserID] = useState();
 
     const classes = useStyles();
 
@@ -35,15 +35,25 @@ const Play = ({ match }) => {
     }
 
     useEffect(() => {
+        setUserID(localStorage.getItem('user'));
         fetchPuzzle();
     }, []);
+
+    const checkMemory = () => {
+        puzzle.usersInfo.forEach(user => {
+            if(user.userID === userID){
+                return setGameState(user.gameState);
+            }
+        })
+        setFocus('c-0-0');
+    }
 
     useEffect(() => {
         if(puzzle.secret){
             createLayout();
             createUsrInput();
-            setFocus('c-0-0');
             setUI('done');
+            checkMemory();
         }
     }, [puzzle]);
 
@@ -94,13 +104,15 @@ const Play = ({ match }) => {
 
     // Sets the focus to the target of the focus state
     useEffect(()=>{
-        document.getElementById(focused).focus();
+        if(document.getElementById(focused)){
+            document.getElementById(focused).focus();
+        }
     }, [focused]);
 
     // Updates the definition of the Definition component on focus change
     const id_match = new RegExp(/(?!-)[0-9]*/, 'g');
     useMemo(() => {
-        if(puzzle.definitions){
+        if(puzzle.definitions && document.getElementById(focused)){
             const indexes = focused.match(id_match);
             const new_def = puzzle.definitions[indexes[1]];
             setDefined(new_def);
@@ -252,57 +264,75 @@ const Play = ({ match }) => {
 
     // Game state management, give the user feedback.
 
-        // updates the gameState
-        const checkSolutions = (solutionCheck, verticalInput) => {
-            const wordState = {
-                incomplete: [],
-                wrong: [],
-                correct: [],
-                vertical: false
-            }
-            solution.forEach((solution, index)=>{
-                if(solutionCheck[index].length === solution.length){
-                    if(solution === solutionCheck[index]){
-                        wordState.correct.push(index);
-                    } else {
-                        wordState.wrong.push(index);
-                    }
-                } else {
-                    wordState.incomplete.push(index);
-                }
+    const saveProgress = async (wordState) => {
+        if(userID){
+            const response = await axios.post(process.env.REACT_APP_API_URI+'/posts/save_progress', {
+                puzzleID: puzzle._id,
+                userID: userID,
+                gameState: wordState
             });
-            if(verticalInput===puzzle.secret.toUpperCase()){
-                wordState.vertical = true;
-                setFirstTimeWinner(firstTimeWinner+1);
-            }
-            setGameState(wordState);
         }
-    
-        useEffect(()=>{
-            if(puzzle.secret){
-                const solutionCheck = [];
-                let verticalInput = ''
-                usrInput.forEach((word, index) => {
-                    solutionCheck.push(word.toString().replaceAll(',','').toUpperCase())
-                    verticalInput += word[puzzle.words[index][0].length][0]
-                });
-                checkSolutions(solutionCheck, verticalInput);
-            }
-            
-        }, [usrInput]);
-    
-    
-        useMemo(()=>{
-            if(puzzle.secret){
-                if(gameState.correct.length === puzzle.secret.length){
-                    setUI('win');
-                } else if(gameState.vertical && firstTimeWinner===1){
-                    setWinDialog(true);
+    }
+
+    // updates the gameState
+    const checkSolutions = (solutionCheck, verticalInput) => {
+        const wordState = {
+            incomplete: [],
+            wrong: [],
+            correct: gameState.correct,
+            vertical: gameState.vertical
+        }
+        solution.forEach((solution, index)=>{
+            if(solutionCheck[index].length === solution.length){
+                if(solution === solutionCheck[index]){
+                    wordState.correct.push(index);
+                } else {
+                    wordState.wrong.push(index);
                 }
+            } else {
+                wordState.incomplete.push(index);
             }
-        }, [gameState]);
+        });
+        if(verticalInput===puzzle.secret.toUpperCase()){
+            wordState.vertical = true;
+            if(!gameState.vertical){
+                setWinDialog(true);
+                saveProgress(wordState);
+            }
+        }
+        if(wordState.correct.length !== gameState.correct.length){
+            saveProgress(wordState);
+        }
+        setGameState(wordState);
+    }
+
+    useEffect(()=>{
+        if(puzzle.secret){
+            const solutionCheck = [];
+            let verticalInput = ''
+            usrInput.forEach((word, index) => {
+                solutionCheck.push(word.toString().replaceAll(',','').toUpperCase())
+                verticalInput += word[puzzle.words[index][0].length][0]
+            });
+            checkSolutions(solutionCheck, verticalInput);
+        }
+        
+    }, [usrInput]);
 
 
+    useMemo(()=>{
+        if(puzzle.secret){
+            if(gameState.correct.length === puzzle.secret.length){
+                setUI('win');
+                saveProgress(gameState);
+            } 
+        }
+    }, [gameState]);
+
+    const handleWinDialogClose = () => {
+        setWinDialog(false);
+        setUI('back')
+    }
 
     // Render
 
@@ -323,7 +353,7 @@ const Play = ({ match }) => {
                     ):(<Typography />)}
                 </Box>
                 {gameState.vertical ? (
-                    <Dialog open={winDialog} onClose={()=>setWinDialog(false)}>
+                    <Dialog open={winDialog} onClose={handleWinDialogClose}>
                         <DialogContent>
                             <DialogContentText>
                                 You guessed the secret word!
@@ -339,7 +369,7 @@ const Play = ({ match }) => {
                             <Button onClick={()=>setUI('win')}>
                                 Go to winning page
                             </Button>
-                            <Button onClick={()=>setWinDialog(false)}>
+                            <Button onClick={handleWinDialogClose}>
                                 Continue solving now
                             </Button>
                         </DialogActions>

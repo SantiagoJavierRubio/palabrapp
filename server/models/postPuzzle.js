@@ -5,6 +5,10 @@ const postSchema = mongoose.Schema({
     secret: String,
     words: [Object],
     definitions: [Object],
+    usersInfo: {
+        type: [Object],
+        default: [{'userID': 'none', 'gameState': { incomplete: [], wrong: [], correct: [], vertical: false }}]
+    },
     creator: {
         userID: String,
         username: String
@@ -44,6 +48,16 @@ postSchema.methods.rate = function(new_rating) {
     this.stats.allRatings.push(new_rating);
     const new_sum = this.stats.allRatings.reduce((a, b) => a + b);
     this.stats.rating = new_sum/this.stats.allRatings.length;
+}
+
+postSchema.methods.saveProgress = function(userID, gameState) {
+    this.usersInfo.forEach(user => {
+        if(user.userID === userID){
+            user['gameState'] = gameState;
+            return;
+        }
+    })
+    this.usersInfo.push({ 'userID': userID, 'gameState': gameState })
 }
 
 const PostPuzzle = mongoose.model('PostPuzzle', postSchema);

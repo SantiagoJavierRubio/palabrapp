@@ -40,13 +40,13 @@ const Word = (props) => {
                         if(gameState.correct.includes(wordIndex)){
                             return(
                                 <Grid key={letterIndex} className={classes.letter} item>
-                                    <CompletedLetter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} correctLetter={letter} position={position} />
+                                    <CompletedLetter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} correctLetter={letter} position={position} />
                                 </Grid>
                             )
                         } else if(gameState.vertical && position==='center'){
                             return(
                                 <Grid key={letterIndex} className={classes.letter} item>
-                                    <CompletedLetter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} correctLetter={letter} position={position} />
+                                    <CompletedLetter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} correctLetter={letter} position={position} />
                                 </Grid>
                             )
                         } else if (gameState.wrong.includes(wordIndex)){

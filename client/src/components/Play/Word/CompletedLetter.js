@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Paper } from '@material-ui/core';
 import useStyles from './styles';
 
 const CompletedLetter = (props) => {
     const classes = useStyles();
 
-    const { id, correctLetter, position } = props;
+    const { id, correctLetter, position, setValue } = props;
+
+    useEffect(() => {
+        setValue({
+            id: id,
+            value: correctLetter,
+            key: null
+        })
+    }, [])
 
     if(position === "center"){
         return (
