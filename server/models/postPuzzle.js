@@ -19,8 +19,7 @@ const postSchema = mongoose.Schema({
             default: 0
         },
         allRatings: {
-            type: [Number],
-            default: 0
+            type: [Number]
         },
         rating: {
             type: Number,

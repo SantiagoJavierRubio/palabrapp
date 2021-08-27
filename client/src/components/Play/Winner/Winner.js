@@ -16,7 +16,7 @@ const Winner = (props) => {
     const [userData, setUserData] = useState({});
 
     const setCompleted = async () => {
-        const response= await axios.post('http://localhost:5000/posts/complete', {
+        const response= await axios.post(process.env.REACT_APP_API_URI+'/posts/complete', {
             puzzleID: puzzleID,
             userID: localStorage.getItem('user')
         })

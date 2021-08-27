@@ -29,7 +29,7 @@ const Form = () => {
     }
 
     const getValidWords = async () => {
-        const response = await axios.post('http://localhost:5000/posts/get_words', {secret: secret})
+        const response = await axios.post(process.env.REACT_APP_API_URI+'/posts/get_words', {secret: secret})
             .catch(err => console.log(err.message));
         setValidWords(response.data);
     }
@@ -95,14 +95,14 @@ const Form = () => {
         setUI('loading');
         const user_id = localStorage.getItem('user');
         if(user_id){
-            const response = await axios.get(`http://localhost:5000/user/${user_id}`);
+            const response = await axios.get(process.env.REACT_APP_API_URI+`/user/${user_id}`);
             const user_data = {
                 userID: response.data.userID,
                 username: response.data.username
             }
             if(user_data){
                 try{
-                    axios.post('http://localhost:5000/posts/new', {
+                    axios.post(process.env.REACT_APP_API_URI+'/posts/new', {
                         secret: puzzle.secret,
                         clue: questionInputValue,
                         words: puzzle.words,

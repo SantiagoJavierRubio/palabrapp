@@ -74,15 +74,25 @@ export const updateUser = async (req, res) => {
 export const authUser = async (req,res) => {
     const log_data = req.body;
     const user_data = await Users.findOne({ "userID": log_data.id });
-    bcrypt.compare(log_data.password, user_data.password, (error, isMatch) => {
-        if(error){
-            throw error
-        } else if (!isMatch) {
-            res.status(200).json({ valid: false });
+    try{
+        bcrypt.compare(log_data.password, user_data.password, (error, isMatch) => {
+            if(error){
+                throw error
+            } else if (!isMatch) {
+                res.status(200).json({ valid: false });
+            } else {
+                res.status(200).json(user_data);
+            }
+        });  
+    } catch (err) {
+        if(user_data===null){
+            res.status(200).json({ noUser: true })
         } else {
-            res.status(200).json(user_data);
+           res.status(409).json({ message: err.message }) 
         }
-    });
+    }
+    
+    
 }
 
 export const getPuzzles = async (req,res) => {

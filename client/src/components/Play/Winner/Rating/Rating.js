@@ -24,7 +24,7 @@ const Rating = (props) => {
 
     const handleRating = async () => {
         setUI('loading');
-        const response = await axios.post('http://localhost:5000/posts/rate', {
+        const response = await axios.post(process.env.REACT_APP_API_URI+'/posts/rate', {
             userID: userData.userID,
             puzzleID: puzzleData._id,
             rating: rating
@@ -52,7 +52,7 @@ const Rating = (props) => {
                 <Box className={classes.ratingMain}>
                     {[1,2,3,4,5].map(num=>{
                         return(
-                            <Button onMouseOver={()=>setRating(num)} className={classes.rateStar} onClick={handleRating}>
+                            <Button key={num} onMouseOver={()=>setRating(num)} className={classes.rateStar} onClick={handleRating}>
                                 {rating>num-1 ? (
                                     <StarIcon className={classes.star}/>
                                 ):(

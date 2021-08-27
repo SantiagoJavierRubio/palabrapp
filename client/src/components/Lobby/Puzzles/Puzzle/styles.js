@@ -68,6 +68,34 @@ export default makeStyles({
     shareBtn: {
     },
     dialogText: {
+        color: 'black',
         fontSize: '1.3rem'
+    },
+    sharingOptions: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginTop: '1rem',
+        marginBottom: '1rem'
+    },
+    shareFab: {
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'stretch',
+        justifyContent: 'stretch',
+        height: '50px',
+        width: '50px'
+    },
+    copyFab: {
+        height: '50px',
+        width: '50px'
+    },
+    shareLink: {
+        padding: '1rem',
+        border: '2px solid gray',
+        fontSize: '1rem',
+        color: 'rgb(246, 246, 243)',
+        backgroundColor: 'rgb(84, 95, 111)',
+        overflow: 'auto'
     }
 });

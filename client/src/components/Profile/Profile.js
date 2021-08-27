@@ -11,7 +11,7 @@ const Profile = ({ match }) => {
     const [isOwn, setOwner] = useState(false);
 
     const getUserData = async () => {
-        const user_data = await axios.get(`http://localhost:5000/user/${match.params.id}`);
+        const user_data = await axios.get(process.env.REACT_APP_API_URI+`/user/${match.params.id}`);
         setUserData(user_data.data);
         let loggedUser = localStorage.getItem('user');
         if(loggedUser === user_data.data.userID){

@@ -14,7 +14,7 @@ const OwnProfile = (props) => {
     const [isEditing, setEdit] = useState(false);
 
     const getPuzzles = async () => {
-        const response = await axios.get(`http://localhost:5000/user/${userData.userID}/puzzles`);
+        const response = await axios.get(process.env.REACT_APP_API_URI+`/user/${userData.userID}/puzzles`);
         setPuzzles(response.data.puzzles);
     }
 
@@ -25,13 +25,17 @@ const OwnProfile = (props) => {
     useEffect(() => {
         if(puzzles){
             let sum = 0;
+            let sumCount = 0;
             for(let puzzle of puzzles){
-                sum += puzzle.stats.rating;
+                if(puzzle.stats.rating!==0){
+                    sum += puzzle.stats.rating;
+                    sumCount++;
+                }
             }
             if(sum === 0){
                 setAvgRating(0);
             } else {
-                const avg = sum / puzzles.length;
+                const avg = sum / sumCount;
                 setAvgRating(avg.toFixed(2));
             }
         }
@@ -41,7 +45,7 @@ const OwnProfile = (props) => {
         const usernameInput = document.getElementById('username-input').value;
         const aboutInput = document.getElementById('about-input').value;
         if(usernameInput!==userData.username || aboutInput !== userData.profile.about){
-            const response = await axios.post('http://localhost:5000/user/update', {
+            const response = await axios.post(process.env.REACT_APP_API_URI+'/user/update', {
                 userID: userData.userID,
                 input: {
                     username: usernameInput,

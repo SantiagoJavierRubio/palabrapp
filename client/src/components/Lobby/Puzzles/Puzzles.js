@@ -1,23 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import Puzzle from './Puzzle/Puzzle';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress, Box } from '@material-ui/core';
 import useStyles from './styles';
     
-const Puzzles = () => {
+const Puzzles = (props) => {
+
     const classes = useStyles();
-
-    const [puzzles, loadPuzzles] = useState([]);
-
-    useEffect(() => {
-        fetchData();
-    }, [loadPuzzles]);
-
-    const fetchData = async () => {
-        const response = await axios.get('http://localhost:5000/posts/')
-            .catch(err => console.log(err.message));
-        loadPuzzles(response.data);
-    }
+    const { puzzles } = props;
 
     if(puzzles[0]){
         return(
@@ -28,13 +17,15 @@ const Puzzles = () => {
                             <Puzzle puzzle_data={puzzle} ownProfileDisplay={false}/>
                         </Grid>
                     )
-                })
-                }
+                })}
             </Grid>
         );
     } else {
         return(
-            <CircularProgress />
+            <Box className={classes.loadingBox}>
+                <CircularProgress />
+            </Box>
+            
         )
     }
 

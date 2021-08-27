@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { Grid, CircularProgress, Box, Button, Typography } from '@material-ui/core';
+import { Grid, CircularProgress, Box, Button, Typography, Dialog, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -13,15 +13,17 @@ import Login from './Login/Login';
 const Play = ({ match }) => {
 
     const [puzzle, loadPuzzle] = useState({});
-    const [layout, loadLayout] = useState({left: [], center: [], right: []});
+    const [layout, loadLayout] = useState({ left: [], center: [], right: [] });
     const [usrInput, loadInput] = useState([]);
     const [solution, loadSolution] = useState([]);
     const [indexMap, setIndexMap] = useState([]);
     const [defined, setDefined] = useState("");
     const [UIState, setUI] = useState('');
     const [focused, setFocus] = useState('root');
-    const [gameState, setGameState] = useState({incomplete: [], wrong: [], correct: []});
-    const [newLogin, setNewLogin] = useState(null)
+    const [gameState, setGameState] = useState({ incomplete: [], wrong: [], correct: [], vertical: false });
+    const [newLogin, setNewLogin] = useState(null);
+    const [winDialog, setWinDialog] = useState(false);
+    const [firstTimeWinner, setFirstTimeWinner] = useState(0);
 
     const classes = useStyles();
 
@@ -41,11 +43,12 @@ const Play = ({ match }) => {
             createLayout();
             createUsrInput();
             setFocus('c-0-0');
+            setUI('done');
         }
     }, [puzzle]);
 
     const fetchPuzzle = async () => {
-        const response = await axios.get(`http://localhost:5000/posts/${match.params.id}`)
+        const response = await axios.get(process.env.REACT_APP_API_URI+`/posts/${match.params.id}`)
             .catch(err => console.log(err.message));
         if(response.data){
             loadPuzzle(response.data);
@@ -84,7 +87,6 @@ const Play = ({ match }) => {
         loadSolution(newSolution);
         loadInput(newUsrInput);
         setIndexMap(newIndexMap);
-        setUI('done');
     }
 
 
@@ -158,14 +160,20 @@ const Play = ({ match }) => {
             case "backspace":
             case "backward":
                 if(inputSum !== 0){
-                    const target = indexMap[inputCoords.y][inputSum-1][0];
+                    let target = indexMap[inputCoords.y][inputSum-1][0];
+                    if(gameState.vertical && target[0]==='c'){
+                        target = indexMap[inputCoords.y][inputSum-2][0]
+                    }
                     return setFocus(target);; 
                 } else {
                     return;
                 }
             case "forward":
                 if(inputSum < indexMap[inputCoords.y].length-1){
-                    const target = indexMap[inputCoords.y][inputSum+1][0];
+                    let target = indexMap[inputCoords.y][inputSum+1][0];
+                    if(gameState.vertical && target[0]==='c'){
+                        target = indexMap[inputCoords.y][inputSum+2][0]
+                    }
                     return setFocus(target);; 
                 } else {
                     return;
@@ -245,11 +253,12 @@ const Play = ({ match }) => {
     // Game state management, give the user feedback.
 
         // updates the gameState
-        const checkSolutions = (solutionCheck) => {
+        const checkSolutions = (solutionCheck, verticalInput) => {
             const wordState = {
                 incomplete: [],
                 wrong: [],
-                correct: []
+                correct: [],
+                vertical: false
             }
             solution.forEach((solution, index)=>{
                 if(solutionCheck[index].length === solution.length){
@@ -261,16 +270,25 @@ const Play = ({ match }) => {
                 } else {
                     wordState.incomplete.push(index);
                 }
-            })
+            });
+            if(verticalInput===puzzle.secret.toUpperCase()){
+                wordState.vertical = true;
+                setFirstTimeWinner(firstTimeWinner+1);
+            }
             setGameState(wordState);
         }
     
         useEffect(()=>{
-            const solutionCheck = [];
-            usrInput.forEach(word => {
-                solutionCheck.push(word.toString().replaceAll(',','').toUpperCase())
-            });
-            checkSolutions(solutionCheck);
+            if(puzzle.secret){
+                const solutionCheck = [];
+                let verticalInput = ''
+                usrInput.forEach((word, index) => {
+                    solutionCheck.push(word.toString().replaceAll(',','').toUpperCase())
+                    verticalInput += word[puzzle.words[index][0].length][0]
+                });
+                checkSolutions(solutionCheck, verticalInput);
+            }
+            
         }, [usrInput]);
     
     
@@ -278,8 +296,8 @@ const Play = ({ match }) => {
             if(puzzle.secret){
                 if(gameState.correct.length === puzzle.secret.length){
                     setUI('win');
-                } else {
-                    return;
+                } else if(gameState.vertical && firstTimeWinner===1){
+                    setWinDialog(true);
                 }
             }
         }, [gameState]);
@@ -304,6 +322,29 @@ const Play = ({ match }) => {
                         </Button>
                     ):(<Typography />)}
                 </Box>
+                {gameState.vertical ? (
+                    <Dialog open={winDialog} onClose={()=>setWinDialog(false)}>
+                        <DialogContent>
+                            <DialogContentText>
+                                You guessed the secret word!
+                            </DialogContentText>
+                            <DialogContentText>
+                                But there are still {puzzle.secret.length-gameState.correct.length} words to solve!
+                            </DialogContentText>
+                            <DialogContentText>
+                                Do you want to see the winning page now? (you can continue solving later)
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>setUI('win')}>
+                                Go to winning page
+                            </Button>
+                            <Button onClick={()=>setWinDialog(false)}>
+                                Continue solving now
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                ):null}
                 <Box component="div" className={classes.puzzleBox} >
                     <Grid container className={classes.sideContainer}>
                         <Word layout={layout} position={"left"} setValue={getValue} gameState={gameState} />

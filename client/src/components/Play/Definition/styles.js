@@ -5,9 +5,10 @@ export default makeStyles(() => ({
         padding: '.5rem',
         position: 'sticky',
         bottom: '1vh',
-        height: '15vh'
+        minHeight: '15vh',
+        height: 'fit-content'
     },
     definitionText: {
-        fontSize: '5vh',
+        fontSize: '4vh',
     }
 }))

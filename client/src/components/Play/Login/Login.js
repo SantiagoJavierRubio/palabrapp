@@ -15,7 +15,7 @@ const Login = (props) => {
             id: document.getElementById('login-id').value,
             password: document.getElementById('login-password').value
         }
-        const validation = await axios.post('http://localhost:5000/user/validate', log_data);
+        const validation = await axios.post(process.env.REACT_APP_API_URI+'/user/validate', log_data);
         if(validation.data.userID){
             localStorage.setItem('user', validation.data.userID);
             updateLogin();

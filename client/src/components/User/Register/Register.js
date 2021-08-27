@@ -24,7 +24,7 @@ const Register = (props) => {
         }
         let check_user = {data: false}
         try {
-            let check_user = await axios.get(`http://localhost:5000/user/${userInput.id}`);
+            let check_user = await axios.get(process.env.REACT_APP_API_URI+`/user/${userInput.id}`);
         } catch {
             let check_user = {data: false}
         }
@@ -32,8 +32,8 @@ const Register = (props) => {
             setIdHelp({ text: 'ID taken, try another.', error: true});
         } else {
             try{
-                await axios.post('http://localhost:5000/user/new', userInput);
-                const user_data = await axios.get(`http://localhost:5000/user/${userInput.id}`);
+                await axios.post(process.env.REACT_APP_API_URI+'/user/new', userInput);
+                const user_data = await axios.get(process.env.REACT_APP_API_URI+`/user/${userInput.id}`);
                 setRegistred(true);
             } catch (err) {
                 console.log(err);
