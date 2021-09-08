@@ -16,7 +16,7 @@ export default makeStyles({
     },
     creatorText: {
         textDecoration: 'none',
-        fontSize: '2rem'
+        fontSize: '1.8rem'
     },
     dateText: {
         marginLeft: '1rem',

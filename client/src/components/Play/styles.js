@@ -26,6 +26,18 @@ export default makeStyles(() => ({
     },
     puzzleClue: {
         fontSize: '2rem',
+    },
+    dialogHeader: {
+        textAlign: 'center',
+        fontSize: '2rem',
+        color: 'black',
+    },
+    dialogMessage: {
+        textAlign: 'center',
+        fontSize: '1.5rem'
+    },
+    dialogQuestion: {
+        marginTop: '2rem'
     }
 }))
 

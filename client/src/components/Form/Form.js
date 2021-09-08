@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from './styles';
 import { TextField, Grid, Button, ButtonGroup, Box, Typography, CircularProgress } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import axios from 'axios';
     
@@ -176,7 +177,8 @@ const Form = () => {
             return(
                 <Box className={classes.donePage}>
                     <Typography variant="h3">Your puzzle was submitted correctly!</Typography>
-                    <Button variant="contained" color="secondary" onClick={handleChangeSecret}>Return</Button>
+                    <Button variant="contained" color="secondary" onClick={handleChangeSecret} className={classes.donePageBtn}>Create another</Button>
+                    <Button variant="contained" color="primary" component={Link} to="/lobby" className={classes.donePageBtn}>Go to lobby</Button>
                 </Box>
             );
 

@@ -50,4 +50,7 @@ export default makeStyles((theme) => ({
         marginTop: '1rem',
         flexDirection: 'column',
     },
+    donePageBtn: {
+        marginTop: '1.5rem'
+    }
 }));

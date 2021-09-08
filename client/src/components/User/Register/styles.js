@@ -43,7 +43,7 @@ export default makeStyles(()=>({
         alignSelf: 'center',
         color: '#5AEB60',
     },
-    registedText: {
+    registredText: {
         fontSize: '2rem',
         fontWeight: 400,
     },

@@ -1,9 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(()=>({
-    root: {
-        
-    },
     mainHeader: {
         fontSize: '3rem',
         marginLeft: '1rem',
@@ -20,6 +17,10 @@ export default makeStyles(()=>({
     },
     appContainer: {
         padding: '1rem',
+    },
+    logoutBtn: {
+        padding: '0.2rem',
+        marginLeft: '0.3rem'
     }
 })
 )

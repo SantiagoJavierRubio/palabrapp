@@ -42,6 +42,9 @@ const Play = ({ match }) => {
     const checkMemory = () => {
         puzzle.usersInfo.forEach(user => {
             if(user.userID === userID){
+                if(user.gameState.correct.length===puzzle.secret.length || user.gameState.vertical){
+                    setUI('back')
+                }
                 return setGameState(user.gameState);
             }
         })
@@ -106,6 +109,8 @@ const Play = ({ match }) => {
     useEffect(()=>{
         if(document.getElementById(focused)){
             document.getElementById(focused).focus();
+        } else {
+            console.log(indexMap.indexOf(focused))
         }
     }, [focused]);
 
@@ -174,7 +179,11 @@ const Play = ({ match }) => {
                 if(inputSum !== 0){
                     let target = indexMap[inputCoords.y][inputSum-1][0];
                     if(gameState.vertical && target[0]==='c'){
-                        target = indexMap[inputCoords.y][inputSum-2][0]
+                        if(indexMap[inputCoords.y][inputSum-2]){
+                            target = indexMap[inputCoords.y][inputSum-2][0];
+                        } else {
+                            return;
+                        }
                     }
                     return setFocus(target);; 
                 } else {
@@ -184,7 +193,11 @@ const Play = ({ match }) => {
                 if(inputSum < indexMap[inputCoords.y].length-1){
                     let target = indexMap[inputCoords.y][inputSum+1][0];
                     if(gameState.vertical && target[0]==='c'){
-                        target = indexMap[inputCoords.y][inputSum+2][0]
+                        if(indexMap[inputCoords.y][inputSum+2][0]){
+                           target = indexMap[inputCoords.y][inputSum+2][0] 
+                        } else {
+                            return;
+                        }
                     }
                     return setFocus(target);; 
                 } else {
@@ -195,8 +208,13 @@ const Play = ({ match }) => {
                     let y = inputCoords.y-1
                     for(y; y>=0; y--){
                         if(!gameState.correct.includes(y)){
-                            const target = indexMap[y][0][0];
-                            return setFocus(target);
+                            if(gameState.vertical && indexMap[y][0][0][0]==='c'){
+                                const target = indexMap[y][1][0];
+                                return setFocus(target);
+                            } else {
+                                const target = indexMap[y][0][0];
+                                return setFocus(target);
+                            }
                         } else {
                             continue;
                         }
@@ -210,8 +228,13 @@ const Play = ({ match }) => {
                     let y = inputCoords.y+1
                     for(y; y<puzzle.secret.length; y++){
                         if(!gameState.correct.includes(y)){
-                            const target = indexMap[y][0][0];
-                            return setFocus(target);
+                            if(gameState.vertical && indexMap[y][0][0][0]==='c'){
+                                const target = indexMap[y][1][0];
+                                return setFocus(target);
+                            } else {
+                                const target = indexMap[y][0][0];
+                                return setFocus(target);
+                            }
                         } else {
                             continue;
                         }
@@ -284,9 +307,10 @@ const Play = ({ match }) => {
         }
         solution.forEach((solution, index)=>{
             if(solutionCheck[index].length === solution.length){
-                if(solution === solutionCheck[index]){
+                if(solution === solutionCheck[index] && !wordState.correct.includes(index)){
                     wordState.correct.push(index);
-                } else {
+                    saveProgress(wordState);
+                } else if(solution !== solutionCheck[index]) {
                     wordState.wrong.push(index);
                 }
             } else {
@@ -300,8 +324,10 @@ const Play = ({ match }) => {
                 saveProgress(wordState);
             }
         }
-        if(wordState.correct.length !== gameState.correct.length){
-            saveProgress(wordState);
+        if(wordState.correct.length !== gameState.correct.length){  
+            if(wordState.correct.length===puzzle.secret.length){
+                setUI('win');
+            }
         }
         setGameState(wordState);
     }
@@ -319,19 +345,9 @@ const Play = ({ match }) => {
         
     }, [usrInput]);
 
-
-    useMemo(()=>{
-        if(puzzle.secret){
-            if(gameState.correct.length === puzzle.secret.length){
-                setUI('win');
-                saveProgress(gameState);
-            } 
-        }
-    }, [gameState]);
-
     const handleWinDialogClose = () => {
         setWinDialog(false);
-        setUI('back')
+        setUI('back');
     }
 
     // Render
@@ -355,22 +371,22 @@ const Play = ({ match }) => {
                 {gameState.vertical ? (
                     <Dialog open={winDialog} onClose={handleWinDialogClose}>
                         <DialogContent>
-                            <DialogContentText>
+                            <DialogContentText className={classes.dialogHeader}>
                                 You guessed the secret word!
                             </DialogContentText>
-                            <DialogContentText>
-                                But there are still {puzzle.secret.length-gameState.correct.length} words to solve!
+                            <DialogContentText className={classes.dialogMessage}>
+                                But there are still {puzzle.secret.length-gameState.correct.length} words to solve
                             </DialogContentText>
-                            <DialogContentText>
+                            <DialogContentText className={classes.dialogQuestion}>
                                 Do you want to see the winning page now? (you can continue solving later)
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=>setUI('win')}>
-                                Go to winning page
-                            </Button>
-                            <Button onClick={handleWinDialogClose}>
+                            <Button onClick={handleWinDialogClose} color="secondary" variant="contained">
                                 Continue solving now
+                            </Button>
+                            <Button onClick={()=>setUI('win')} color="primary" variant="contained">
+                                Go to winning page
                             </Button>
                         </DialogActions>
                     </Dialog>

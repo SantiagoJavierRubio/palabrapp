@@ -18,6 +18,7 @@ import Lobby from './components/Lobby/Lobby';
 import Play from './components/Play/Play';
 import UserManagement from './components/User/UserManagement';
 import Profile from './components/Profile/Profile';
+import Homepage from './components/Homepage/Homepage';
 
 // Styles import
 import useStyles from './styles';
@@ -54,7 +55,7 @@ const App = () => {
     const classes = useStyles();
     
     return(
-        <Container disableGutters={true}>
+        <Container disableGutters={true} className={classes.mainContainer}>
             <AppBar position="static" color="inherit" className={classes.appBar}>
                 <Toolbar>
                     <IconButton edge="start" onClick={toggleDrawer}>
@@ -95,7 +96,7 @@ const App = () => {
                     </a>
                     {user ? 
                         <>
-                            <PersonIcon /><p>{user}</p><Button onClick={handleLogOut} >(Sign out)</Button>
+                            <PersonIcon /><a href={'/profile/'+user}>{user}</a><Button className={classes.logoutBtn} variant="outlined" color="secondary" onClick={handleLogOut} >Sign out</Button>
                         </> 
                         :
                         <UserManagement logUser={logUser} />
@@ -107,6 +108,7 @@ const App = () => {
                 <Container disableGutters={true} className={classes.appContainer}>
                    <Router>
                        <Switch>
+                            <Route path="/" exact={true} component={Homepage} />
                             <Route path="/lobby" component={Lobby} />
                             <Route path="/create" component={Form} />
                             <Route path="/play/:id" component={Play} />

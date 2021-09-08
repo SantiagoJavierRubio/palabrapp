@@ -72,7 +72,7 @@ const Winner = (props) => {
                     <Box className={classes.optionsMenu}>
                         <Link to={`/profile/${puzzleData.creator.userID}`} className={classes.optionLink}>
                             <Button variant="contained" color="primary" >
-                                See more of your puzzles.
+                                See more of your puzzles
                             </Button>
                         </Link>
                         <Typography variant="body2" className={classes.orTypo}>
