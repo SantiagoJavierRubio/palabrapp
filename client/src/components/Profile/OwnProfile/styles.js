@@ -25,7 +25,8 @@ export default makeStyles(()=>({
     },
     userName: {
         fontSize: '3rem',
-        fontWeight: 500
+        fontWeight: 500,
+        marginLeft: '.5rem',
     },
     resize: {
         fontSize: '2.5rem'

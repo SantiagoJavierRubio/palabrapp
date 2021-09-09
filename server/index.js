@@ -13,6 +13,11 @@ app.use(cors());
 app.use('/posts', postRoutes);
 app.use('/user', userRoutes);
 
+// Landing page
+app.get('/', (req, res) => {
+    res.send('Welcome to PalabrApp API');
+});
+
 // DB setup
 const PORT = process.env.PORT || 5000;
 

@@ -62,6 +62,7 @@ const Lobby = () => {
             case 'longest':
                 puzzleArray.sort((a,b)=> a.secret.length < b.secret.length ? 1 : -1);
                 return(puzzleArray);
+            default: return;
         }
     }
 

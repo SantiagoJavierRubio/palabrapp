@@ -72,6 +72,7 @@ const Letter = (props) => {
                     value: e.target.value,
                     key: "down"
                 })
+            default: return;
         }
     }
 

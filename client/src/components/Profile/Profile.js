@@ -31,6 +31,7 @@ const Profile = ({ match }) => {
         if(match.params.id !== 'null'){
             getUserData()
         } else {
+            setHasUser(false);
             setErrorMessage('Please sign in or create an account to view your profile');
         }
     }, []);

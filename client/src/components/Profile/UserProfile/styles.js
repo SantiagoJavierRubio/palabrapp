@@ -22,7 +22,8 @@ export default makeStyles(()=>({
     },
     userName: {
         fontSize: '3rem',
-        fontWeight: 500
+        fontWeight: 500,
+        marginLeft: '.5rem',
     },
     moreInfo: {
         marginTop: '.5rem',

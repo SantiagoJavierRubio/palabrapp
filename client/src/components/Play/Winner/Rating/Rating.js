@@ -34,6 +34,7 @@ const Rating = (props) => {
     }
 
     switch(UIState){
+        default:
         case 'loading':
             return(
                 <Box className={classes.ratingMain}>

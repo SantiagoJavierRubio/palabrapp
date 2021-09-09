@@ -8,7 +8,9 @@ export default makeStyles((theme) => ({
         justifyContent: 'center'
     },
     sortingBox: {
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-end',
+        display: 'flex',
+        alignItems: 'center',
     },
     moreBtn: {
         marginTop: '1rem',

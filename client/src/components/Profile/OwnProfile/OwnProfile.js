@@ -73,7 +73,7 @@ const OwnProfile = (props) => {
                 </Box>
                 <Box component="span" className={classes.userInfo}>
                     <Box component="div" className={classes.basicInfo}>
-                        <Avatar className={classes.userAvatar}>{userData.username[0]}</Avatar>
+                        <Avatar className={classes.userAvatar} style={{backgroundColor: userData.profile.color}}>{userData.username[0]}</Avatar>
                         {isEditing ? (
                             <TextField variant="outlined" defaultValue={userData.username} InputProps={{ classes: {input: classes.resize}}} className={classes.userNameEdit} id="username-input"/>
                         ):(

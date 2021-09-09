@@ -41,10 +41,7 @@ export default makeStyles(()=>({
     },
     footerBox: {
         textAlign: 'center',
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        marginTop: '50vh',
         margin: 'auto',
     },
 })

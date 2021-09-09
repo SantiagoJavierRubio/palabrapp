@@ -24,16 +24,16 @@ const Register = (props) => {
         }
         let check_user = {data: false}
         try {
-            let check_user = await axios.get(process.env.REACT_APP_API_URI+`/user/${userInput.id}`);
+            check_user = await axios.get(process.env.REACT_APP_API_URI+`/user/${userInput.id}`);
         } catch {
-            let check_user = {data: false}
+            check_user = {data: false}
         }
         if(check_user.data){
             setIdHelp({ text: 'ID taken, try another.', error: true});
         } else {
             try{
                 await axios.post(process.env.REACT_APP_API_URI+'/user/new', userInput);
-                const user_data = await axios.get(process.env.REACT_APP_API_URI+`/user/${userInput.id}`);
+                await axios.get(process.env.REACT_APP_API_URI+`/user/${userInput.id}`);
                 setRegistred(true);
             } catch (err) {
                 console.log(err);

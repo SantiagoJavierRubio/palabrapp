@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // Material-UI imports
 import { 
     Container, AppBar, Typography, Grow, Toolbar, IconButton, Drawer,
@@ -119,7 +119,7 @@ const App = () => {
             </Grow>
             <Box component="footer" className={classes.footerBox}>
                 <p>Beta version 1.0 - September 2021</p>
-                <p>Made by Santiago J. Rubio - <a href="https://github.com/SantiagoJavierRubio" target="_blank">GitHub</a></p>
+                <p>Made by Santiago J. Rubio - <a href="https://github.com/SantiagoJavierRubio" target="_blank" rel="noreferrer">GitHub</a></p>
             </Box>
         </Container>
     )

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Button, Typography, Card, CardActions, CardContent, Fab, Dialog, DialogActions, DialogContent, DialogContentText, Tooltip, Box, IconButton, FormLabel } from '@material-ui/core';
+import { Button, Typography, Card, CardActions, CardContent, Fab, Dialog, DialogActions, DialogContent, DialogContentText, Tooltip, Box } from '@material-ui/core';
 import { EmailShareButton, WhatsappShareButton, TelegramShareButton, TwitterShareButton } from 'react-share';
 import { EmailIcon, TelegramIcon, TwitterIcon, WhatsappIcon } from "react-share";
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -118,28 +118,28 @@ const Puzzle = (props) => {
                         </Typography>
                         <Box className={classes.sharingOptions}>
                             <Tooltip arrow title="Mail">
-                                <Fab className={classes.shareFab}>
+                                <Fab className={classes.shareFab} component="div">
                                     <EmailShareButton url={puzzleLink}>
-                                        <EmailIcon round={true} size={50} />
+                                        <EmailIcon round={true} size={50}/>
                                     </EmailShareButton>
                                 </Fab>
                             </Tooltip>
                             <Tooltip arrow title="Whatsapp">
-                                <Fab className={classes.shareFab}>
+                                <Fab className={classes.shareFab} component="div">
                                     <WhatsappShareButton url={puzzleLink}>
                                         <WhatsappIcon round={true} size={50}/>
                                     </WhatsappShareButton>
                                 </Fab>
                             </Tooltip>
                             <Tooltip arrow title="Telegram">
-                                <Fab className={classes.shareFab}>
+                                <Fab className={classes.shareFab} component="div">
                                     <TelegramShareButton url={puzzleLink}>
                                         <TelegramIcon round={true} size={50}/>
                                     </TelegramShareButton> 
                                 </Fab>
                             </Tooltip>
                             <Tooltip arrow title="Tweet">
-                                <Fab className={classes.shareFab}>
+                                <Fab className={classes.shareFab} component="div">
                                     <TwitterShareButton url={puzzleLink}>
                                         <TwitterIcon round={true} size={50}/>
                                     </TwitterShareButton>

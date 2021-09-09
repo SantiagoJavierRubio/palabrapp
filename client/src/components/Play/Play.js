@@ -289,7 +289,7 @@ const Play = ({ match }) => {
 
     const saveProgress = async (wordState) => {
         if(userID){
-            const response = await axios.post(process.env.REACT_APP_API_URI+'/posts/save_progress', {
+            await axios.post(process.env.REACT_APP_API_URI+'/posts/save_progress', {
                 puzzleID: puzzle._id,
                 userID: userID,
                 gameState: wordState
@@ -368,7 +368,7 @@ const Play = ({ match }) => {
                         </Button>
                     ):(<Typography />)}
                 </Box>
-                {gameState.vertical ? (
+                {(gameState.vertical && UIState!=='back' && gameState.correct.length !== puzzle.secret.length ) ? (
                     <Dialog open={winDialog} onClose={handleWinDialogClose}>
                         <DialogContent>
                             <DialogContentText className={classes.dialogHeader}>

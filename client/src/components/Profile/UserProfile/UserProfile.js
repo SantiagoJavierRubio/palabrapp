@@ -46,7 +46,7 @@ const UserProfile = (props) => {
             <Box className={classes.main}>
                 <Box component="span" className={classes.userInfo}>
                     <Box component="div" className={classes.basicInfo}>
-                        <Avatar className={classes.userAvatar}>{userData.username[0]}</Avatar>
+                        <Avatar className={classes.userAvatar} style={{backgroundColor: userData.profile.color}}>{userData.username[0]}</Avatar>
                         <Typography variant="h2" className={classes.userName}>{userData.username}</Typography>
                     </Box>
                     <Box component="div" className={classes.moreInfo}>

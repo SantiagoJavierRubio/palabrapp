@@ -20,6 +20,7 @@ const Word = (props) => {
                 return setClass(classes.wordContainerCenter);
             case "right":
                 return setClass(classes.wordContainerRight);
+            default: return;
         }
     }, [])
 
