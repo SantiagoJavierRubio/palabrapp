@@ -141,8 +141,15 @@ const Form = () => {
         case 'start':
             return(
                 <form onSubmit={handleSubmit} className={classes.secretForm} autoComplete="off" >
-                    <TextField fullWidth label="Question or clue" onChange={(e) => setQuestionInput(e.target.value)} id="question-input" className={classes.inputText} required/>
-                    <TextField fullWidth label="Your secret answer (1 word)" inputProps={{maxLength: 12}} onChange={(e) => setSecretInput(e.target.value)} id="secret-input" error={inputError.bool} helperText={inputError.msg} className={classes.inputText} required/>
+
+                    <TextField fullWidth label="Question or clue" 
+                            onChange={(e) => setQuestionInput(e.target.value)} id="question-input" 
+                            className={classes.inputText} required/>
+
+                    <TextField fullWidth label="Your secret answer (1 word)" 
+                            inputProps={{maxLength: 12}} onChange={(e) => setSecretInput(e.target.value)} id="secret-input" 
+                            error={inputError.bool} helperText={inputError.msg} className={classes.inputText} required/>
+
                     <Button variant="contained" color="primary" type="submit" className={classes.createBtn} endIcon={<ArrowForwardIcon />}>Create</Button>
                 </form>
             );

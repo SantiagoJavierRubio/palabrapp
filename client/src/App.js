@@ -55,10 +55,10 @@ const App = () => {
     const classes = useStyles();
     
     return(
-        <Container disableGutters={true} className={classes.mainContainer}>
+        <Container disableGutters={true}>
             <AppBar position="static" color="inherit" className={classes.appBar}>
                 <Toolbar>
-                    <IconButton edge="start" onClick={toggleDrawer}>
+                    <IconButton edge="start" onClick={toggleDrawer} className={classes.burgerMenu}>
                         <MenuIcon />
                     </IconButton>
                     <Drawer anchor="top" open={displayDrawer} onClose={toggleDrawer}>
@@ -96,7 +96,7 @@ const App = () => {
                     </a>
                     {user ? 
                         <>
-                            <PersonIcon /><a href={'/profile/'+user}>{user}</a><Button className={classes.logoutBtn} variant="outlined" color="secondary" onClick={handleLogOut} >Sign out</Button>
+                            <PersonIcon /><a href={'/profile/'+user} className={classes.userLink}>{user}</a><Button className={classes.logoutBtn} variant="contained" color="primary" onClick={handleLogOut} >Sign out</Button>
                         </> 
                         :
                         <UserManagement logUser={logUser} />
@@ -117,6 +117,10 @@ const App = () => {
                    </Router>
                 </Container>
             </Grow>
+            <Box component="footer" className={classes.footerBox}>
+                <p>Beta version 1.0 - September 2021</p>
+                <p>Made by Santiago J. Rubio - <a href="https://github.com/SantiagoJavierRubio" target="_blank">GitHub</a></p>
+            </Box>
         </Container>
     )
 }

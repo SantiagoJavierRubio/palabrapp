@@ -83,7 +83,7 @@ const Puzzle = (props) => {
             <CardActions className={classes.cardActions}>
                 {ownProfileDisplay ? (
                     <>
-                        <Fab onClick={()=>setDeleteDialog(true)} size="small" color="secondary">
+                        <Fab onClick={()=>setDeleteDialog(true)} size="small" color="primary">
                             <DeleteIcon />
                         </Fab>
                         <Dialog open={deleteDialogOpen} onClose={handleClose}>
@@ -96,7 +96,7 @@ const Puzzle = (props) => {
                                 <Button onClick={handleClose} color="primary" variant="contained" autoFocus>
                                     No
                                 </Button>
-                                <Button onClick={handleDelete} color="secondary" variant="contained">
+                                <Button onClick={handleDelete} color="primary" variant="contained">
                                     Yes, delete it.
                                 </Button>
                             </DialogActions>
@@ -105,7 +105,7 @@ const Puzzle = (props) => {
                 ):(
                     <Typography />
                 )}
-                <Button onClick={()=>setShareDialog(true)} variant="contained" color="secondary" className={classes.shareBtn}>
+                <Button onClick={()=>setShareDialog(true)} variant="contained" color="primary" className={classes.shareBtn}>
                     <ShareIcon />
                 </Button>
                 <Dialog open={shareDialogOpen} onClose={handleClose}>

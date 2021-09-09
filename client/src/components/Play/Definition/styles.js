@@ -6,7 +6,8 @@ export default makeStyles(() => ({
         position: 'sticky',
         bottom: '1vh',
         minHeight: '15vh',
-        height: 'fit-content'
+        height: 'fit-content',
+        zIndex: 2,
     },
     definitionText: {
         fontSize: '4vh',

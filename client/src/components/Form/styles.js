@@ -10,7 +10,10 @@ export default makeStyles((theme) => ({
     },
     inputText: {
         marginTop: '.5rem',
-        marginBottom: '.5rem'
+        marginBottom: '.5rem',
+        '& input': {
+            fontSize: '2rem',
+        }
     },
     createBtn: {
         marginTop: '.5rem',

@@ -25,7 +25,7 @@ const UserManagement = (props) => {
     if(loginView){
         return(
             <>
-                <Button variant="outlined" onClick={toggleView}>Sign In</Button>
+                <Button variant="contained" color="secondary" onClick={toggleView}>Sign In</Button>
                 {register ? (
                     <Register logUser={logUser} toggleRegister={toggleRegister} toggleView={toggleView}/>
                 ) : (
@@ -35,7 +35,7 @@ const UserManagement = (props) => {
         )
     } else {
         return(
-            <Button variant="outlined" onClick={toggleView}>Sign In</Button>
+            <Button variant="contained" color="secondary" onClick={toggleView}>Sign In</Button>
         )
     }
 

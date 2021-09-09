@@ -37,7 +37,7 @@ const Homepage = () => {
                         <Card className={`${classes.buttonCard} ${classes.createCard}`}>
                             <Typography variant="h4">Create new puzzle</Typography>
                             <CardContent>
-                                <Fab component={Link} to="/create" color="secondary">
+                                <Fab component={Link} to="/create" className={classes.fabIcon}>
                                     <AddIcon fontSize="large" />
                                 </Fab>
                             </CardContent>
@@ -47,8 +47,8 @@ const Homepage = () => {
                         <Card className={`${classes.buttonCard} ${classes.lobbyCard}`}>
                             <Typography variant="h4">Go to lobby</Typography>
                             <CardContent>
-                                <Fab component={Link} to="/lobby" color="primary">
-                                    <ExtensionIcon fontSize="large"/>
+                                <Fab component={Link} to="/lobby" className={classes.fabIcon}>
+                                    <ExtensionIcon fontSize="large" />
                                 </Fab>  
                             </CardContent>
                         </Card>
