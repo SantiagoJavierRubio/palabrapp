@@ -55,9 +55,9 @@ const App = () => {
     const classes = useStyles();
     
     return(
-        <Container disableGutters={true}>
-            <AppBar position="static" color="inherit" className={classes.appBar}>
-                <Toolbar>
+        <Container disableGutters={true} className={classes.mainContainer}>
+            <AppBar position="static" className={classes.appBar}>
+                <Toolbar className={classes.toolbar}>
                     <IconButton edge="start" onClick={toggleDrawer} className={classes.burgerMenu}>
                         <MenuIcon />
                     </IconButton>
