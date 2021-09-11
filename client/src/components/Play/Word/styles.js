@@ -28,6 +28,10 @@ export default makeStyles((theme) => ({
     letter: {
         width: '5rem',
         height: '5rem',
+        [theme.breakpoints.down('md')]: {
+            width: '3rem',
+            height: '3rem',
+        },
         [theme.breakpoints.down('sm')]: {
             width: '2rem',
             height: '2rem',
@@ -58,8 +62,11 @@ export default makeStyles((theme) => ({
         textTransform: "uppercase",
         textAlign: "center",
         fontSize: '2.5rem',
+        [theme.breakpoints.down('md')]: {
+            fontSize: '1.2rem',
+        },
         [theme.breakpoints.down('sm')]: {
-            fontSize: '1rem',
+            fontSize: '.8rem',
         },
         height: '80%',
         width: '100%',
@@ -69,8 +76,11 @@ export default makeStyles((theme) => ({
         textTransform: "uppercase",
         textAlign: "center",
         fontSize: '2.5rem',
+        [theme.breakpoints.down('md')]: {
+            fontSize: '1.2rem',
+        },
         [theme.breakpoints.down('sm')]: {
-            fontSize: '1rem',
+            fontSize: '.8rem',
         },
         height: '80%',
         width: '100%',

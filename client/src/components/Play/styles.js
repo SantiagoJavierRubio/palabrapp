@@ -5,6 +5,11 @@ export default makeStyles((theme) => ({
         display: 'none',
         [`${theme.breakpoints.down('sm')} and (orientation: portrait) and (max-device-width: 480px)`]: {
             display: 'block',
+            margin: 'auto',
+            fontSize: '1.5rem',
+            textAlign: 'center',
+            marginTop: '50%',
+            animation: 'flickerAnimation 4s infinite',
         }
     },
     puzzleBox: {

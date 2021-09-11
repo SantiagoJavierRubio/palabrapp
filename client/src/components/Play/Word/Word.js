@@ -53,7 +53,7 @@ const Word = (props) => {
                         } else if (gameState.wrong.includes(wordIndex)){
                             return(
                                 <Grid key={letterIndex} className={classes.letter} item>
-                                    <Letter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} position={position} color={'red'}/>
+                                    <Letter id={`${position[0]}-${layout[`${position}`].indexOf(word, wordIndex)}-${letterIndex}`} setValue={setValue} position={position} color={'red'} />
                                 </Grid>
                             )
                         } else {

@@ -105,12 +105,25 @@ const Play = ({ match }) => {
 
     // Input and output management
 
+    // Set tab-indexes for puzzle navigation
+    useEffect(() => {
+        if(!indexMap.includes([])){
+            let i = 1;
+            for(let word of indexMap){
+                for(let char of word){
+                    document.getElementById(char[0]).setAttribute('tabindex', i);
+                    i++;
+                }
+            }
+        }
+    }, [indexMap]);
+
     // Sets the focus to the target of the focus state
     useEffect(()=>{
         if(document.getElementById(focused)){
             document.getElementById(focused).focus();
         } else {
-            console.log(indexMap.indexOf(focused))
+            console.log(focused);
         }
     }, [focused]);
 
@@ -394,7 +407,7 @@ const Play = ({ match }) => {
                 <Box component="div" className={classes.tiltMsg}>
                     <Typography variant="body1">Please tilt your device to see the puzzle.</Typography>
                 </Box>
-                <Box component="div" className={classes.puzzleBox} >
+                <Box component="div" className={classes.puzzleBox}>
                     <Grid container className={classes.sideContainer}>
                         <Word layout={layout} position={"left"} setValue={getValue} gameState={gameState} />
                     </Grid> 

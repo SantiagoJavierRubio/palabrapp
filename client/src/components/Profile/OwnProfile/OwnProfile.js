@@ -66,9 +66,9 @@ const OwnProfile = (props) => {
             <Box className={classes.main}>
                 <Box className={classes.editBtn}>
                     {isEditing ? (
-                        <Button onClick={manageChanges}>Set changes</Button>
+                        <Button onClick={manageChanges} variant="outlined" color="secondary">Set changes</Button>
                      ):(
-                        <Button endIcon={<EditIcon />} onClick={()=>setEdit(true)}>Edit profile</Button>
+                        <Button endIcon={<EditIcon />} onClick={()=>setEdit(true)} variant="outlined" color="primary">Edit profile</Button>
                     )}
                 </Box>
                 <Box component="span" className={classes.userInfo}>
