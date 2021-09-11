@@ -40,7 +40,10 @@ const Form = () => {
         while(usedWords.includes(word.palabra)){
             word = validSet[Math.floor(Math.random()*validSet.length)]
         }
-        word.palabra = word.palabra.normalize("NFD").replace(valid_chars, "");
+        word.palabra = word.palabra.replace('ñ', '-001');
+        word.palabra = word.palabra.normalize("NFD");
+        word.palabra = word.palabra.replace('-001', 'ñ');
+        word.palabra = word.palabra.replace(valid_chars, "");
         return word;        
     }
 
