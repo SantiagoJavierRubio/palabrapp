@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { Grid, CircularProgress, Box, Button, Typography, Dialog, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { Grid, CircularProgress, Box, Button, Typography, Dialog, DialogContent, DialogContentText, DialogActions, Tooltip } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -371,14 +371,19 @@ const Play = ({ match }) => {
             return(
                 <>
                 <Box className={classes.arrowsContainer}>
-                    <Link to="/lobby">
-                        <ArrowBackIosIcon />
-                    </Link>
+                    <Tooltip arrow title="Back to lobby">
+                        <Link to="/lobby">
+                            <ArrowBackIosIcon />
+                        </Link>
+                    </Tooltip>
                     <Typography variant="h2" className={classes.puzzleClue}>{puzzle.clue}</Typography>
                     {UIState==='back' ? (
-                        <Button onClick={()=>setUI('win')}>
-                            <ArrowForwardIosIcon />
-                        </Button>
+                        <Tooltip arrow title="Winning page">
+                            <Button onClick={()=>setUI('win')}>
+                                <ArrowForwardIosIcon />
+                            </Button> 
+                        </Tooltip>
+                        
                     ):(<Typography />)}
                 </Box>
                 {(gameState.vertical && UIState!=='back' && gameState.correct.length !== puzzle.secret.length ) ? (
@@ -426,9 +431,12 @@ const Play = ({ match }) => {
                 return(
                     <>
                         <Box className={classes.arrowsContainer}>
-                            <Button onClick={()=>setUI('back')}>
-                                <ArrowBackIosIcon />
-                            </Button>
+                            <Tooltip arrow title="Back to puzzle">
+                                <Button onClick={()=>setUI('back')}>
+                                    <ArrowBackIosIcon />
+                                </Button> 
+                            </Tooltip>
+                            
                         </Box>                    
                         
                         <Winner puzzleID={match.params.id} />
@@ -438,9 +446,11 @@ const Play = ({ match }) => {
                 return(
                     <>
                         <Box className={classes.arrowsContainer}>
-                            <Button onClick={()=>setUI('back')}>
-                                <ArrowBackIosIcon />
-                            </Button>
+                            <Tooltip arrow title="Back to puzzle">
+                                <Button onClick={()=>setUI('back')}>
+                                    <ArrowBackIosIcon />
+                                </Button>
+                            </Tooltip> 
                         </Box>  
                         <Typography variant="h3">
                             Log in to record your progress and rate the puzzle!

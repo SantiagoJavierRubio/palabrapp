@@ -47,7 +47,6 @@ const Letter = (props) => {
                     key: "backspace"
                 })
             case 39:
-            case 9:
                 return setValue({
                     id: id,
                     value: e.target.value,

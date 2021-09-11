@@ -119,7 +119,7 @@ const App = () => {
             </Grow>
             <Box component="footer" className={classes.footerBox}>
                 <p>Beta version 1.0 - September 2021</p>
-                <p>Made by Santiago J. Rubio - <a href="https://github.com/SantiagoJavierRubio" target="_blank" rel="noreferrer">GitHub</a></p>
+                <p>Made by Santiago J. Rubio - <a href="https://github.com/SantiagoJavierRubio/palabrapp" target="_blank" rel="noreferrer">GitHub</a></p>
             </Box>
         </Container>
     )
