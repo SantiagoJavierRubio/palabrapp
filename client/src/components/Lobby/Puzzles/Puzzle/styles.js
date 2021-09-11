@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
     puzzleCard: {
         display: 'flex',
         height: "100%",
@@ -85,14 +85,29 @@ export default makeStyles({
     shareFab: {
         overflow: 'hidden',
         display: 'flex',
+        flexGrow: 0,
         alignItems: 'stretch',
         justifyContent: 'stretch',
         height: '50px',
-        width: '50px'
+        width: '50px',
+        [theme.breakpoints.down('sm')]: {
+            heigth: '5px',
+            width: '30px',
+        },
     },
     copyFab: {
         height: '50px',
-        width: '50px'
+        width: '50px',
+        boxShadow: 'none',
+        [theme.breakpoints.down('sm')]: {
+            heigth: '30px',
+            width: '30px',
+            backgroundColor: 'transparent',
+            '&:focus': {
+                boxShadow: 'none',
+                backgroundColor: 'transparent',
+            },
+        },
     },
     shareLink: {
         padding: '1rem',
@@ -101,5 +116,13 @@ export default makeStyles({
         color: 'rgb(246, 246, 243)',
         backgroundColor: 'rgb(84, 95, 111)',
         overflow: 'auto'
+    },
+    innerIcon: {
+        width: '50px',
+        height: '50px',
+        [theme.breakpoints.down('sm')]: {
+            heigth: '30px',
+            width: '30px',
+        },
     }
-});
+}));

@@ -391,6 +391,9 @@ const Play = ({ match }) => {
                         </DialogActions>
                     </Dialog>
                 ):null}
+                <Box component="div" className={classes.tiltMsg}>
+                    <Typography variant="body1">Please tilt your device to see the puzzle.</Typography>
+                </Box>
                 <Box component="div" className={classes.puzzleBox} >
                     <Grid container className={classes.sideContainer}>
                         <Word layout={layout} position={"left"} setValue={getValue} gameState={gameState} />

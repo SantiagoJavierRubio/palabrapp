@@ -1,13 +1,22 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
+    tiltMsg: {
+        display: 'none',
+        [`${theme.breakpoints.down('sm')} and (orientation: portrait) and (max-device-width: 480px)`]: {
+            display: 'block',
+        }
+    },
     puzzleBox: {
         display: 'flex',
         marginTop: '.5rem',
         flexDirection: 'row',
         alignItems: 'stretch',
         justifyContent: 'center',
-        marginBottom: '1rem'
+        marginBottom: '1rem',
+        [`${theme.breakpoints.down('sm')} and (orientation: portrait) and (max-device-width: 480px)`]: {
+            display: 'none',
+        }
     },
     sideContainer: {
         flexWrap: "nowrap",

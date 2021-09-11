@@ -1,17 +1,17 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
     wordContainerLeft: {
-        paddingTop: '1.5vh',
+        paddingTop: '.5rem',
         display: 'flex',
         justifyContent: "flex-end",
         flexWrap: "nowrap",
         flexGrow: 1,
     },
     wordContainerCenter: {
-        paddingTop: '1.5vh',
-        paddingRight: '.7vw',
-        paddingLeft: '.7vw',
+        paddingTop: '.5rem',
+        paddingRight: '.5rem',
+        paddingLeft: '.5rem',
         display: 'flex',
         justifyContent: "center",
         flexWrap: "nowrap",
@@ -19,15 +19,19 @@ export default makeStyles(() => ({
         width: 'fit-content',
     },
     wordContainerRight: {
-        paddingTop: '1.5vh',
+        paddingTop: '.5rem',
         display: 'flex',
         justifyContent: "flex-start",
         flexWrap: "nowrap",
         flexGrow: 1,
     },
     letter: {
-        width: '5vw',
-        height: '5vw',
+        width: '5rem',
+        height: '5rem',
+        [theme.breakpoints.down('sm')]: {
+            width: '2rem',
+            height: '2rem',
+        },
         justifyContent: "space-evenly",
         alignItems: "center",
         textAlign: "center",
@@ -53,7 +57,10 @@ export default makeStyles(() => ({
     letterInput: {
         textTransform: "uppercase",
         textAlign: "center",
-        fontSize: '3.5vw',
+        fontSize: '2.5rem',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1rem',
+        },
         height: '80%',
         width: '100%',
         border: "none",
@@ -61,7 +68,10 @@ export default makeStyles(() => ({
     letterInputCenter: {
         textTransform: "uppercase",
         textAlign: "center",
-        fontSize: '3.5vw',
+        fontSize: '2.5rem',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1rem',
+        },
         height: '80%',
         width: '100%',
         border: "none",

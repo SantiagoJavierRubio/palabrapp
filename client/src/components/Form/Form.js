@@ -170,10 +170,10 @@ const Form = () => {
                         })}
                     </Grid>
                     <Box className={classes.buttonsBox}>
-                        <Button variant="contained" color="primary" onClick={handlePost}>Send</Button>
+                        <Button variant="contained" color="primary" onClick={handlePost} className={classes.formBtn}>Send</Button>
                         <ButtonGroup variant="text" color="secondary">
-                            <Button onClick={handleResetWords}>Re-create</Button>
-                            <Button onClick={handleChangeSecret}>Change word</Button>
+                            <Button onClick={handleResetWords} className={classes.formBtn}>Re-create</Button>
+                            <Button onClick={handleChangeSecret} className={classes.formBtn}>Change word</Button>
                         </ButtonGroup>
                     </Box>
                    

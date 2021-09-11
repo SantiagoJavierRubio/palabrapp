@@ -19,7 +19,9 @@ const Puzzle = (props) => {
     const [deleteDialogOpen, setDeleteDialog] = useState(false);
     const [shareDialogOpen, setShareDialog] = useState(false);
     const [puzzleLink, setPuzzleLink] = useState('');
-    const [copyText, setCopied] = useState('Copy link')
+    const [copyText, setCopied] = useState('Copy link');
+
+    const shareText = "Check out this PalabrApp puzzle! ";
 
     useEffect(()=> {
         setPuzzleLink(`${window.location.origin}/play/${_id}`)
@@ -117,33 +119,25 @@ const Puzzle = (props) => {
                             {puzzleLink}
                         </Typography>
                         <Box className={classes.sharingOptions}>
-                            <Tooltip arrow title="Mail">
-                                <Fab className={classes.shareFab} component="div">
-                                    <EmailShareButton url={puzzleLink}>
-                                        <EmailIcon round={true} size={50}/>
-                                    </EmailShareButton>
-                                </Fab>
+                            <Tooltip arrow title="Mail" subject={shareText}>
+                                <EmailShareButton url={puzzleLink} className={classes.shareFab}>
+                                    <EmailIcon round={true} className={classes.innerIcon} />
+                                </EmailShareButton>
                             </Tooltip>
                             <Tooltip arrow title="Whatsapp">
-                                <Fab className={classes.shareFab} component="div">
-                                    <WhatsappShareButton url={puzzleLink}>
-                                        <WhatsappIcon round={true} size={50}/>
-                                    </WhatsappShareButton>
-                                </Fab>
+                                <WhatsappShareButton url={shareText + puzzleLink} className={classes.shareFab}>
+                                    <WhatsappIcon round={true} className={classes.innerIcon}/>
+                                </WhatsappShareButton>
                             </Tooltip>
                             <Tooltip arrow title="Telegram">
-                                <Fab className={classes.shareFab} component="div">
-                                    <TelegramShareButton url={puzzleLink}>
-                                        <TelegramIcon round={true} size={50}/>
-                                    </TelegramShareButton> 
-                                </Fab>
+                                <TelegramShareButton url={shareText + puzzleLink} className={classes.shareFab}>
+                                    <TelegramIcon round={true} className={classes.innerIcon}/>
+                                </TelegramShareButton> 
                             </Tooltip>
                             <Tooltip arrow title="Tweet">
-                                <Fab className={classes.shareFab} component="div">
-                                    <TwitterShareButton url={puzzleLink}>
-                                        <TwitterIcon round={true} size={50}/>
-                                    </TwitterShareButton>
-                                </Fab>
+                                <TwitterShareButton url={shareText + puzzleLink} className={classes.shareFab}>
+                                    <TwitterIcon round={true} className={classes.innerIcon}/>
+                                </TwitterShareButton>
                             </Tooltip>
                             <Tooltip arrow title={copyText}>
                                 <Fab className={classes.copyFab} onClick={handleCopyLink} >

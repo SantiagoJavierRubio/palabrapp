@@ -4,7 +4,6 @@ export default makeStyles((theme)=>({
     mainContainer: {
         width: '100%',
         maxWidth: '1500px',
-        overflow: 'hidden',
     },
     appBar: {
         color: 'rgb(245, 235, 250)',
